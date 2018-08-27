@@ -1,0 +1,23 @@
+name: "rstats4bio"
+navbar:
+  title: "rstats4bio"
+  left:
+    - text: "home"
+      href: index.html
+    - text: "lesson1"
+      href: lesson1.html
+    - text: "lesson2"
+      href: lesson2.html
+    - text: "lesson3"
+      href: lesson3.html
+    - text: "lesson4"
+      href: lesson4.html
+    - text: "lesson5"
+      href: lesson5.html
+    - text: "test"
+      href: test.html
+      
+output_dir: "."
+output:
+  html_document:
+    theme: yeti
