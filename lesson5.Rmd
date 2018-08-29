@@ -4,4 +4,45 @@ output: html_document
 ---
 <br>
 
-###Practice
+###Practice test/hackathon  
+![](./halloween.jpg)  
+
+
+Here is a webinar I like and also a good book chapter.
+
+[Tutorial on reading data into R](https://www.rstudio.com/resources/webinars/getting-your-data-into-r/)
+
+[Great read on efficient data carpentry](https://bookdown.org/csgillespie/efficientR/data-carpentry.html)
+
+[Efficient statistics slide deck](http://www.slideshare.net/cjlortie/efficient-statistics-in-r)
+
+<b>Halloween Hackathon</b>  
+Costumes options.  
+Candy provided.  
+Now, we practice from start to finish including submission of the r-script or rmd you write to [turnitin.com](http://turnitin.com)  
+
+Class ID: 18910126 and Key is rstats4bio
+
+A graduate-level dataset.
+Apply your new mathemagical skills from scratch.
+A single three-hour block.
+As advanced as you want to be.
+Fundamental principles demonstrated.
+At least two fundamental statistical tests demonstrated.
+
+<b>Practical outcomes to demonstrate </b>
+Rename some variables.
+Address missing values.
+Generate a simplified table/dataframe. 
+Visualize the data to identify patterns and relationships.
+Produce a publication quality graphic.
+Do EDA on data very broadly.
+Do a single statistical address to capture main effect observed.
+Annotate
+
+**Marking key**  
+Effective data viz/10  
+Effective exploratory data analyses/5  
+Final data model/5  
+Annotation, description, and brief interpretation/5  
+Total = 25%
