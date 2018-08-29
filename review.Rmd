@@ -5,3 +5,15 @@ output: html_document
 <br>
 
 ###Review  
+Please read a total of 3 chapters and write a book review for the class text.  
+
+Here are ten simple rules to guide you.
+[Ten simple rules for writing statistical book reviews](https://peerj.com/preprints/26924/)
+
+
+If you strongly prefer, you are welcome to select and read a total of three peer-reviewed 'how to' do biostats papers and review them instead. The same marking key will be used.
+
+**Marking key**  
+Each rule covered in some capacity/2  
+Writing style and coherence/5  
+Total = 25%

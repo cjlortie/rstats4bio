@@ -223,6 +223,177 @@ $(document).ready(function () {
 <p><br></p>
 <div id="biostatistical-tools" class="section level3">
 <h3>Biostatistical tools</h3>
+<p><img src="bubblegum.png" /><br />
+want data. have data. will collect data.</p>
+<p>assumption: in this course, you are here to work with data. data literacy IS data science.</p>
+<p><a href="http://www.slideshare.net/cjlortie/whyr">WhyR introductory lecture</a></p>
+<p><a href="http://datascienceplus.com/the-importance-of-data-visualization/">The importance of data viz</a></p>
+<p><b> Philosophy of R stats </b> Statistical thinking: likelihood, error, and effect sizes. Contemporary statisticians embrace and are mindful of these three key concepts in all research, data, and statistical inference examinations.</p>
+<p>Modes of inference with your data: using data, what can you infer or do? 1. Data description 2. Likelihood 3. Estimation 4. Baysian inference - weight and include what we know 5. Prediction 6. Hypothesis testing 7. Decision making -balance gains and risks</p>
+<p>This set of ideas provide the foundation for many data science and statistical approached to working with evidence within almost every domain of science.</p>
+<p><b>Data viz first and foremost. Case study #1.</b></p>
+<pre class="r"><code>#blog post by Fisseha Berhane
+library(ggplot2)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(reshape2)
+
+#Create four groups: setA, setB, setC and setD.
+setA=select(anscombe, x=x1,y=y1)
+setB=select(anscombe, x=x2,y=y2)
+setC=select(anscombe, x=x3,y=y3)
+setD=select(anscombe, x=x4,y=y4)
+
+#Add a third column which can help us to identify the four groups.
+setA$group =&#39;SetA&#39;
+setB$group =&#39;SetB&#39;
+setC$group =&#39;SetC&#39;
+setD$group =&#39;SetD&#39;
+
+#merge the four datasets
+all_data=rbind(setA,setB,setC,setD)  # merging all the four data sets
+all_data[c(1,13,23,43),]  # showing sample</code></pre>
+<pre><code>##     x    y group
+## 1  10 8.04  SetA
+## 13  8 8.14  SetB
+## 23 10 7.46  SetC
+## 43  8 7.91  SetD</code></pre>
+<pre class="r"><code>#compare summary stats
+summary_stats =all_data%&gt;%group_by(group)%&gt;%summarize(&quot;mean x&quot;=mean(x),
+                                       &quot;Sample variance x&quot;=var(x),
+                                       &quot;mean y&quot;=round(mean(y),2),
+                                       &quot;Sample variance y&quot;=round(var(y),1),
+                                       &#39;Correlation between x and y &#39;=round(cor(x,y),2)
+                                      )
+models = all_data %&gt;% 
+      group_by(group) %&gt;%
+      do(mod = lm(y ~ x, data = .)) %&gt;%
+      do(data.frame(var = names(coef(.$mod)),
+                    coef = round(coef(.$mod),2),
+                    group = .$group)) %&gt;%
+dcast(., group~var, value.var = &quot;coef&quot;)</code></pre>
+<pre><code>## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character</code></pre>
+<pre><code>## Warning in bind_rows_(x, .id): binding character and factor vector,
+## coercing into character vector
+
+## Warning in bind_rows_(x, .id): binding character and factor vector,
+## coercing into character vector
+
+## Warning in bind_rows_(x, .id): binding character and factor vector,
+## coercing into character vector
+
+## Warning in bind_rows_(x, .id): binding character and factor vector,
+## coercing into character vector</code></pre>
+<pre class="r"><code>summary_stats_and_linear_fit = cbind(summary_stats, data_frame(&quot;Linear regression&quot; =
+                                    paste0(&quot;y = &quot;,models$&quot;(Intercept)&quot;,&quot; + &quot;,models$x,&quot;x&quot;)))
+
+summary_stats_and_linear_fit</code></pre>
+<pre><code>##   group mean x Sample variance x mean y Sample variance y
+## 1  SetA      9                11    7.5               4.1
+## 2  SetB      9                11    7.5               4.1
+## 3  SetC      9                11    7.5               4.1
+## 4  SetD      9                11    7.5               4.1
+##   Correlation between x and y  Linear regression
+## 1                         0.82      y = 3 + 0.5x
+## 2                         0.82      y = 3 + 0.5x
+## 3                         0.82      y = 3 + 0.5x
+## 4                         0.82      y = 3 + 0.5x</code></pre>
+<pre class="r"><code>#data viz instead as first step
+ggplot(all_data, aes(x=x,y=y)) +geom_point(shape = 21, colour = &quot;red&quot;, fill = &quot;orange&quot;, size = 3)+
+    ggtitle(&quot;Anscombe&#39;s data sets&quot;)+geom_smooth(method = &quot;lm&quot;,se = FALSE,color=&#39;blue&#39;) + 
+    facet_wrap(~group, scales=&quot;free&quot;)</code></pre>
+<p><img src="lesson1_files/figure-html/data%20viz%20exercise-1.png" width="672" /> Outcome from stats first, data viz later (tricked), descriptive estimates of data can be deceptive. Draw first, then interpret.</p>
+<p><b>Survey data from class. Case study #2.</b></p>
+<pre class="r"><code>#load class survey responses from google poll completed in class
+survey&lt;-read.csv(&quot;data/5081.survey.1.csv&quot;)
+str(survey) #check data match what we collected</code></pre>
+<pre><code>## &#39;data.frame&#39;:    18 obs. of  4 variables:
+##  $ r.experience : int  2 1 2 3 1 1 3 1 1 3 ...
+##  $ discipline   : Factor w/ 4 levels &quot;ecology&quot;,&quot;environmental science&quot;,..: 4 3 4 4 1 4 1 1 1 3 ...
+##  $ research.data: Factor w/ 2 levels &quot;qualitative&quot;,..: 2 2 2 2 2 2 2 1 2 2 ...
+##  $ r.studio     : Factor w/ 2 levels &quot;No&quot;,&quot;Yes&quot;: 1 2 2 2 1 1 2 1 2 1 ...</code></pre>
+<pre class="r"><code>#data viz
+hist(survey$r.experience, xlab=&quot;experience in R (1 is none, 5 is extensive)&quot;, ylab=&quot;frequency&quot;, main=&quot;Likert Scale 1 to 5&quot;)</code></pre>
+<p><img src="lesson1_files/figure-html/survey-1.png" width="672" /></p>
+<pre class="r"><code>plot(survey$r.experience~survey$discipline, xlab=&quot;discipline&quot;, ylab=&quot;experience in R&quot;)</code></pre>
+<p><img src="lesson1_files/figure-html/survey-2.png" width="672" /></p>
+<pre class="r"><code>plot(survey$r.studio, ylab=&quot;R Studio&quot;)</code></pre>
+<p><img src="lesson1_files/figure-html/survey-3.png" width="672" /></p>
+<pre class="r"><code>plot(survey$research.data, ylab=&quot;Research data&quot;)</code></pre>
+<p><img src="lesson1_files/figure-html/survey-4.png" width="672" /></p>
+<pre class="r"><code>#observe patterns by checking plots</code></pre>
+<p><b>Observations from data viz</b> We have limited experience in R. Experience in R varies by research discipline. A total of half the respondents have tried R Studio. Most participants will be working with quantitative data in their own research projects.</p>
+<pre class="r"><code>#Now, try some simple summary statistics.
+summary(survey)</code></pre>
+<pre><code>##   r.experience                   discipline      research.data r.studio
+##  Min.   :1.000   ecology              :6    qualitative : 1    No :9   
+##  1st Qu.:1.000   environmental science:1    quantitative:17    Yes:9   
+##  Median :1.000   genetics             :2                               
+##  Mean   :1.667   physiology           :9                               
+##  3rd Qu.:2.000                                                         
+##  Max.   :3.000</code></pre>
+<pre class="r"><code>#Data summary looks reasonable based on plots, mean R experience is &lt; 2
+t.test(survey$r.experience, mu=1) #t-test if mean is different from 1</code></pre>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  survey$r.experience
+## t = 3.3665, df = 17, p-value = 0.003664
+## alternative hypothesis: true mean is not equal to 1
+## 95 percent confidence interval:
+##  1.248861 2.084472
+## sample estimates:
+## mean of x 
+##  1.666667</code></pre>
+<pre class="r"><code>t.test(survey$r.experience, mu=2) #t-test if mean is different from 2</code></pre>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  survey$r.experience
+## t = -1.6833, df = 17, p-value = 0.1106
+## alternative hypothesis: true mean is not equal to 2
+## 95 percent confidence interval:
+##  1.248861 2.084472
+## sample estimates:
+## mean of x 
+##  1.666667</code></pre>
+<pre class="r"><code>#A one sample t-test confirms we have a bit experience in R.
+
+m1&lt;-glm(r.experience~discipline, family = poisson, data = survey) #test for differenes between disciplines in R experience
+m1 #model summary</code></pre>
+<pre><code>## 
+## Call:  glm(formula = r.experience ~ discipline, family = poisson, data = survey)
+## 
+## Coefficients:
+##                     (Intercept)  disciplineenvironmental science  
+##                       5.108e-01                       -5.108e-01  
+##              disciplinegenetics             disciplinephysiology  
+##                       1.823e-01                       -6.678e-10  
+## 
+## Degrees of Freedom: 17 Total (i.e. Null);  14 Residual
+## Null Deviance:       6.808 
+## Residual Deviance: 6.371     AIC: 56.79</code></pre>
+<pre class="r"><code>anova(m1, test=&quot;Chisq&quot;) #test whether the differences in model are different</code></pre>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model: poisson, link: log
+## 
+## Response: r.experience
+## 
+## Terms added sequentially (first to last)
+## 
+## 
+##            Df Deviance Resid. Df Resid. Dev Pr(&gt;Chi)
+## NULL                          17     6.8075         
+## discipline  3  0.43692        14     6.3706   0.9325</code></pre>
+<pre class="r"><code>#Too little evidence to be significantly different between disciplines.</code></pre>
 </div>
 
 

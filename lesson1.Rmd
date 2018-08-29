@@ -4,4 +4,110 @@ output: html_document
 ---
 <br>
 
-###Biostatistical tools
+###Biostatistical tools  
+![](./bubblegum.png)  
+want data. have data. will collect data.  
+
+assumption: in this course, you are here to work with data.
+data literacy IS data science.
+
+[WhyR introductory lecture](http://www.slideshare.net/cjlortie/whyr)  
+
+[The importance of data viz](http://datascienceplus.com/the-importance-of-data-visualization/)
+
+<b> Philosophy of R stats </b>
+Statistical thinking: likelihood, error, and effect sizes. Contemporary statisticians embrace and are mindful of these three key concepts in all research, data, and statistical inference examinations.
+
+Modes of inference with your data: using data, what can you infer or do?
+1. Data description
+2. Likelihood
+3. Estimation
+4. Baysian inference - weight and include what we know
+5. Prediction
+6. Hypothesis testing
+7. Decision making -balance gains and risks
+
+This set of ideas provide the foundation for many data science and statistical approached to working with evidence within almost every domain of science.
+
+<b>Data viz first and foremost. Case study #1.</b>
+```{r, data viz exercise}
+#blog post by Fisseha Berhane
+library(ggplot2)
+library(dplyr)
+library(reshape2)
+
+#Create four groups: setA, setB, setC and setD.
+setA=select(anscombe, x=x1,y=y1)
+setB=select(anscombe, x=x2,y=y2)
+setC=select(anscombe, x=x3,y=y3)
+setD=select(anscombe, x=x4,y=y4)
+
+#Add a third column which can help us to identify the four groups.
+setA$group ='SetA'
+setB$group ='SetB'
+setC$group ='SetC'
+setD$group ='SetD'
+
+#merge the four datasets
+all_data=rbind(setA,setB,setC,setD)  # merging all the four data sets
+all_data[c(1,13,23,43),]  # showing sample
+
+#compare summary stats
+summary_stats =all_data%>%group_by(group)%>%summarize("mean x"=mean(x),
+                                       "Sample variance x"=var(x),
+                                       "mean y"=round(mean(y),2),
+                                       "Sample variance y"=round(var(y),1),
+                                       'Correlation between x and y '=round(cor(x,y),2)
+                                      )
+models = all_data %>% 
+      group_by(group) %>%
+      do(mod = lm(y ~ x, data = .)) %>%
+      do(data.frame(var = names(coef(.$mod)),
+                    coef = round(coef(.$mod),2),
+                    group = .$group)) %>%
+dcast(., group~var, value.var = "coef")
+
+summary_stats_and_linear_fit = cbind(summary_stats, data_frame("Linear regression" =
+                                    paste0("y = ",models$"(Intercept)"," + ",models$x,"x")))
+
+summary_stats_and_linear_fit
+
+#data viz instead as first step
+ggplot(all_data, aes(x=x,y=y)) +geom_point(shape = 21, colour = "red", fill = "orange", size = 3)+
+    ggtitle("Anscombe's data sets")+geom_smooth(method = "lm",se = FALSE,color='blue') + 
+    facet_wrap(~group, scales="free")
+
+```
+Outcome from stats first, data viz later (tricked), descriptive estimates of data can be deceptive. Draw first, then interpret.
+
+
+<b>Survey data from class. Case study #2.</b>
+```{r, survey}
+#load class survey responses from google poll completed in class
+survey<-read.csv("data/5081.survey.1.csv")
+str(survey) #check data match what we collected
+
+#data viz
+hist(survey$r.experience, xlab="experience in R (1 is none, 5 is extensive)", ylab="frequency", main="Likert Scale 1 to 5")
+plot(survey$r.experience~survey$discipline, xlab="discipline", ylab="experience in R")
+plot(survey$r.studio, ylab="R Studio")
+plot(survey$research.data, ylab="Research data")
+#observe patterns by checking plots
+```
+<b>Observations from data viz</b>
+We have limited experience in R. Experience in R varies by research discipline. A total of half the respondents have tried R Studio. Most participants will be working with quantitative data in their own research projects.
+
+```{r, test survey data with EDA}
+#Now, try some simple summary statistics.
+summary(survey)
+#Data summary looks reasonable based on plots, mean R experience is < 2
+t.test(survey$r.experience, mu=1) #t-test if mean is different from 1
+t.test(survey$r.experience, mu=2) #t-test if mean is different from 2
+#A one sample t-test confirms we have a bit experience in R.
+
+m1<-glm(r.experience~discipline, family = poisson, data = survey) #test for differenes between disciplines in R experience
+m1 #model summary
+anova(m1, test="Chisq") #test whether the differences in model are different
+#Too little evidence to be significantly different between disciplines.
+
+```
