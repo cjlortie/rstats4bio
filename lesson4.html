@@ -223,6 +223,541 @@ $(document).ready(function () {
 <p><br></p>
 <div id="exploratory-data-analysis" class="section level3">
 <h3>Exploratory data analysis</h3>
+<div class="figure">
+<img src="EDA.png" />
+
+</div>
+<p>fundamental descriptive stats.<br />
+distributions via density plots<br />
+GLM. GLMM. Post hoc tests.<br />
+modelR</p>
+<p><a href="http://www.slideshare.net/cjlortie/exploratory-data-analysis-and-models-in-r">slide deck for EDA</a></p>
+<p><b> Philosophy of R stats </b><br />
+Exploratory data analyses is everything we have done. a. Tidy data.<br />
+b. Inspect data structure.<br />
+c. Data viz.<br />
+d. Basic exploratory data analyses.</p>
+<p>However, now that we are ready to apply models, we add in one more tiny step. Visualize the data to better understand its typology and underlying distribution. Then, you are ready to fit your models.</p>
+<p>A statistical model is an elegant, representative simplification of the patterns you have identified through data viz and EDA. It should capture data/experimental structure including the key variables, appropriate levels, and relevant covariation or contexts that mediate outcomes. It should support the data viz. It should provide an estimate of the statistical likelihood or probability of differences. Ideally, the underlying coefficients should also be mined to convey an estimate of effect sizes. A t.test, chi.square test, linear model, general linear model, or generalized linear mixed model are all examples of models that describe and summarize patterns and each have associated assumptions about the data they embody. Hence, the final step pre-model fit, is explore distributions.</p>
+<p>Conceptually, there are two kind of models. Those that look back and those that look forward. Think tardis or time machine. A model is always a snapshot using your time machine. It can be a grab of what happened or a future snap of what you predict. In R, there is simple code to time travel in either direction. Actually, there is no time - <a href="https://www.wired.com/2016/09/arrow-of-time/">Arrow of time</a> - only an observer potential perception of it. Statistical models are our observers here. These observers use ‘probability distributions’ as we described in the first week sensu statistical thinking to calibrate what the think we observed or will observe given the evidence at hand.</p>
+<p><b>Case study #1: x,y continuous</b></p>
+<pre class="r"><code>library(ggplot2)
+library(dplyr)
+library(modelr)
+#Data viz for pattern
+qplot(x,y, data = sim1)</code></pre>
+<p><img src="lesson4_files/figure-html/case%20study%201-1.png" width="672" /></p>
+<pre class="r"><code>#Now inspect distribution of y
+ggplot(sim1) + 
+  geom_density(mapping = aes(y))</code></pre>
+<p><img src="lesson4_files/figure-html/case%20study%201-2.png" width="672" /></p>
+<pre class="r"><code>ggplot(sim1) + 
+  geom_histogram(mapping = aes(y), binwidth=5)</code></pre>
+<p><img src="lesson4_files/figure-html/case%20study%201-3.png" width="672" /></p>
+<pre class="r"><code>shapiro.test(sim1$y) #p-value &lt;0.05 means is different from normal</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  sim1$y
+## W = 0.97483, p-value = 0.6777</code></pre>
+<pre class="r"><code>qqnorm(sim1$y) #qqplots common to inspsect quantiles</code></pre>
+<p><img src="lesson4_files/figure-html/case%20study%201-4.png" width="672" /></p>
+<pre class="r"><code>#not significantly different from normal. great.
+#model time!
+
+#Remember, you own the purpose! Does x predict y? Linear model straight up!
+
+m1 &lt;-lm(y~x, data = sim1)
+summary(m1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x, data = sim1)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.1469 -1.5197  0.1331  1.4670  4.6516 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   4.2208     0.8688   4.858 4.09e-05 ***
+## x             2.0515     0.1400  14.651 1.17e-14 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.203 on 28 degrees of freedom
+## Multiple R-squared:  0.8846, Adjusted R-squared:  0.8805 
+## F-statistic: 214.7 on 1 and 28 DF,  p-value: 1.173e-14</code></pre>
+<pre class="r"><code>#wow, these simulated are too good. Remember, this is the backwards, time travel, hypothesis test given what we have. Not prediction of new data per se but description of observation of patterns.
+coef(m1) #remember &#39;minecraft&#39; your model a bit to get a sense of effects.</code></pre>
+<pre><code>## (Intercept)           x 
+##    4.220822    2.051533</code></pre>
+<div class="figure">
+<img src="families.png" />
+
+</div>
+<p><b> Case study #2 categorical x, continuous y</b></p>
+<pre class="r"><code>ggplot(sim2) + 
+  geom_point(aes(x, y)) #categorical x</code></pre>
+<p><img src="lesson4_files/figure-html/case%20study%20study-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(sim2) + 
+  geom_density(mapping = aes(y))</code></pre>
+<p><img src="lesson4_files/figure-html/case%20study%20study-2.png" width="672" /></p>
+<pre class="r"><code>ggplot(sim2) + 
+  geom_histogram(mapping = aes(y), binwidth=1) #changing binwidth really changes perception of distribution</code></pre>
+<p><img src="lesson4_files/figure-html/case%20study%20study-3.png" width="672" /></p>
+<pre class="r"><code>shapiro.test(sim2$y) </code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  sim2$y
+## W = 0.92313, p-value = 0.009676</code></pre>
+<pre class="r"><code>qqnorm(sim2$y) #non-normal</code></pre>
+<p><img src="lesson4_files/figure-html/case%20study%20study-4.png" width="672" /></p>
+<pre class="r"><code>#so, could do anova but likely not great link to underlying probability distribution
+m2 &lt;- aov(y~x, data = sim2)
+summary(m2)</code></pre>
+<pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)    
+## x            3  335.1  111.71   92.52 &lt;2e-16 ***
+## Residuals   36   43.5    1.21                   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>names(m2)</code></pre>
+<pre><code>##  [1] &quot;coefficients&quot;  &quot;residuals&quot;     &quot;effects&quot;       &quot;rank&quot;         
+##  [5] &quot;fitted.values&quot; &quot;assign&quot;        &quot;qr&quot;            &quot;df.residual&quot;  
+##  [9] &quot;contrasts&quot;     &quot;xlevels&quot;       &quot;call&quot;          &quot;terms&quot;        
+## [13] &quot;model&quot;</code></pre>
+<pre class="r"><code>plot(m2$residuals) #residuals not bad</code></pre>
+<p><img src="lesson4_files/figure-html/case%20study%20study-5.png" width="672" /></p>
+<pre class="r"><code>#library(fitdistrplus)
+
+m3 &lt;- glm(y~x, data = sim2, family = &quot;quasi&quot;)
+summary(m3) #better</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = y ~ x, family = &quot;quasi&quot;, data = sim2)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -2.40131  -0.43996  -0.05776   0.49066   2.63938  
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   1.1522     0.3475   3.316  0.00209 ** 
+## xb            6.9639     0.4914  14.171 2.68e-16 ***
+## xc            4.9750     0.4914  10.124 4.47e-12 ***
+## xd            0.7588     0.4914   1.544  0.13131    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for quasi family taken to be 1.207495)
+## 
+##     Null deviance: 378.61  on 39  degrees of freedom
+## Residual deviance:  43.47  on 36  degrees of freedom
+## AIC: NA
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<pre class="r"><code>#you can also explore distributions in even more detail to ensure correct model (correct = matches/describes underlying structure AND data distribution)
+anova(m3, test=&quot;Chisq&quot;) #is x significant factor?</code></pre>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model: quasi, link: identity
+## 
+## Response: y
+## 
+## Terms added sequentially (first to last)
+## 
+## 
+##      Df Deviance Resid. Df Resid. Dev  Pr(&gt;Chi)    
+## NULL                    39     378.61              
+## x     3   335.14        36      43.47 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>#Cullen and Frey Graphs are cool
+#fitdistrplus not bad.  Usually, the type of data, ie. count, frequency, proportion is just as effective on deciding on family type vesus distribution exploration.  The goal is to fit the &#39;best&#39; model. Best is simplest and representative. Formal tools to contrast models sometimes help too.
+
+#note, mixed models, can use lme4 package if some effects and others are random. Need to think this over. Fixed = groups or levels in factors not due to random causes, random effects = likely from random causes or latent drivers such as population/species specificity.</code></pre>
+<p><b> Case study #3: interactions cat.x, cont.x, y</b></p>
+<pre class="r"><code>str(sim3)</code></pre>
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    120 obs. of  5 variables:
+##  $ x1 : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ x2 : Factor w/ 4 levels &quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;d&quot;: 1 1 1 2 2 2 3 3 3 4 ...
+##  $ rep: int  1 2 3 1 2 3 1 2 3 1 ...
+##  $ y  : Named num  -0.571 1.184 2.237 7.437 8.518 ...
+##   ..- attr(*, &quot;names&quot;)= chr  &quot;a&quot; &quot;a&quot; &quot;a&quot; &quot;b&quot; ...
+##  $ sd : num  2 2 2 2 2 2 2 2 2 2 ...</code></pre>
+<pre class="r"><code>ggplot(sim3) +
+  geom_point(aes(x1, y, colour = x2))</code></pre>
+<p><img src="lesson4_files/figure-html/interactions%20with%20different%20x.classes-1.png" width="672" /></p>
+<pre class="r"><code>#x1 is continous
+#x2 is categorical
+#Q are there an effect of xs on y and do the effect interact, i.e. level of x1 influence changes by x2.
+
+ggplot(sim3) + 
+  geom_density(mapping = aes(y))</code></pre>
+<p><img src="lesson4_files/figure-html/interactions%20with%20different%20x.classes-2.png" width="672" /></p>
+<pre class="r"><code>ggplot(sim3) + 
+  geom_histogram(mapping = aes(y), binwidth=1)</code></pre>
+<p><img src="lesson4_files/figure-html/interactions%20with%20different%20x.classes-3.png" width="672" /></p>
+<pre class="r"><code>shapiro.test(sim3$y) </code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  sim3$y
+## W = 0.97593, p-value = 0.0299</code></pre>
+<pre class="r"><code>qqnorm(sim3$y)  </code></pre>
+<p><img src="lesson4_files/figure-html/interactions%20with%20different%20x.classes-4.png" width="672" /></p>
+<pre class="r"><code>#s.d. from normal but not bad. could be contigent on the levels of x.
+
+ggplot(sim3, aes(x1, y)) + 
+  geom_boxplot(aes(colour = x2))</code></pre>
+<p><img src="lesson4_files/figure-html/interactions%20with%20different%20x.classes-5.png" width="672" /></p>
+<pre class="r"><code>#so, looks like the distribution of y relates to the factors. Likely good to go on parametric linear model.
+
+m4 &lt;-lm(y~x1*x2, data = sim3) #interactions terms for all levels
+summary(m4)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x1 * x2, data = sim3)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.87634 -0.67655  0.04837  0.69963  2.58607 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  1.30124    0.40400   3.221  0.00167 ** 
+## x1          -0.09302    0.06511  -1.429  0.15587    
+## x2b          7.06938    0.57134  12.373  &lt; 2e-16 ***
+## x2c          4.43090    0.57134   7.755 4.41e-12 ***
+## x2d          0.83455    0.57134   1.461  0.14690    
+## x1:x2b      -0.76029    0.09208  -8.257 3.30e-13 ***
+## x1:x2c       0.06815    0.09208   0.740  0.46076    
+## x1:x2d       0.27728    0.09208   3.011  0.00322 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.024 on 112 degrees of freedom
+## Multiple R-squared:  0.8221, Adjusted R-squared:  0.811 
+## F-statistic: 73.93 on 7 and 112 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>m5 &lt;-lm(y~x1+x2, data = sim3) #independent x1 &amp; x2 effects on 7 modeled.
+summary(m5)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x1 + x2, data = sim3)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.4674 -0.8524 -0.0729  0.7886  4.3005 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  1.87167    0.38738   4.832 4.22e-06 ***
+## x1          -0.19674    0.04871  -4.039 9.72e-05 ***
+## x2b          2.88781    0.39571   7.298 4.07e-11 ***
+## x2c          4.80574    0.39571  12.145  &lt; 2e-16 ***
+## x2d          2.35959    0.39571   5.963 2.79e-08 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.533 on 115 degrees of freedom
+## Multiple R-squared:  0.5911, Adjusted R-squared:  0.5768 
+## F-statistic: 41.55 on 4 and 115 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>plot(m5) #sometimes I plot the model to explore/mine model for its capacity to describe the patterns</code></pre>
+<p><img src="lesson4_files/figure-html/interactions%20with%20different%20x.classes-6.png" width="672" /><img src="lesson4_files/figure-html/interactions%20with%20different%20x.classes-7.png" width="672" /><img src="lesson4_files/figure-html/interactions%20with%20different%20x.classes-8.png" width="672" /><img src="lesson4_files/figure-html/interactions%20with%20different%20x.classes-9.png" width="672" /></p>
+<pre class="r"><code>anova(m5, test=&quot;Chisq&quot;) #tells you if effects are significant.</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: y
+##            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## x1          1  38.32  38.319  16.314 9.718e-05 ***
+## x2          3 352.07 117.358  49.966 &lt; 2.2e-16 ***
+## Residuals 115 270.11   2.349                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>#you can also contrast different models using the anova of different models.
+m.b &lt;-anova(m4,m5, test=&quot;Chisq&quot;)
+m.b</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: y ~ x1 * x2
+## Model 2: y ~ x1 + x2
+##   Res.Df    RSS Df Sum of Sq  Pr(&gt;Chi)    
+## 1    112 117.51                           
+## 2    115 270.11 -3   -152.59 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><b> Case study #4: interactions cont.x, cont.x, y</b></p>
+<pre class="r"><code>str(sim4)</code></pre>
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    300 obs. of  4 variables:
+##  $ x1 : num  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+##  $ x2 : num  -1 -1 -1 -0.778 -0.778 ...
+##  $ rep: int  1 2 3 1 2 3 1 2 3 1 ...
+##  $ y  : num  4.2477 1.206 0.3535 -0.0467 4.6387 ...</code></pre>
+<pre class="r"><code>ggplot(sim4) +
+  geom_point(aes(x1, y, colour = x2))</code></pre>
+<p><img src="lesson4_files/figure-html/interactions%20with%20same%20x.classes-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(sim4) + 
+  geom_density(mapping = aes(y))</code></pre>
+<p><img src="lesson4_files/figure-html/interactions%20with%20same%20x.classes-2.png" width="672" /></p>
+<pre class="r"><code>ggplot(sim4) + 
+  geom_histogram(mapping = aes(y), binwidth=1)</code></pre>
+<p><img src="lesson4_files/figure-html/interactions%20with%20same%20x.classes-3.png" width="672" /></p>
+<pre class="r"><code>shapiro.test(sim4$y) #more divegence from normality</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  sim4$y
+## W = 0.98703, p-value = 0.008507</code></pre>
+<pre class="r"><code>qqnorm(sim4$y)  </code></pre>
+<p><img src="lesson4_files/figure-html/interactions%20with%20same%20x.classes-4.png" width="672" /></p>
+<pre class="r"><code>m6 &lt;-glm(y~x1*x2, data = sim4)
+summary(m6) #significant interaction term in model</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = y ~ x1 * x2, data = sim4)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -5.9629  -1.4165  -0.1032   1.4284   4.9957  
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.03546    0.11995   0.296  0.76772    
+## x1           1.82167    0.18792   9.694  &lt; 2e-16 ***
+## x2          -2.78252    0.18792 -14.807  &lt; 2e-16 ***
+## x1:x2        0.95228    0.29441   3.235  0.00136 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for gaussian family taken to be 4.316076)
+## 
+##     Null deviance: 2674.6  on 299  degrees of freedom
+## Residual deviance: 1277.6  on 296  degrees of freedom
+## AIC: 1296
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<pre class="r"><code>anova(m6, test=&quot;Chisq&quot;) #Looks solid.</code></pre>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model: gaussian, link: identity
+## 
+## Response: y
+## 
+## Terms added sequentially (first to last)
+## 
+## 
+##       Df Deviance Resid. Df Resid. Dev  Pr(&gt;Chi)    
+## NULL                    299     2674.6              
+## x1     1   405.59       298     2269.0 &lt; 2.2e-16 ***
+## x2     1   946.29       297     1322.7 &lt; 2.2e-16 ***
+## x1:x2  1    45.16       296     1277.6  0.001218 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>m7 &lt;-glm(y~x1+x2, data = sim4)
+summary(m7) #missed interaction term here and given distribution exploration, likely important.</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = y ~ x1 + x2, data = sim4)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -5.5514  -1.3859  -0.1107   1.4928   4.7180  
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.03546    0.12184   0.291    0.771    
+## x1           1.82167    0.19089   9.543   &lt;2e-16 ***
+## x2          -2.78252    0.19089 -14.577   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for gaussian family taken to be 4.453581)
+## 
+##     Null deviance: 2674.6  on 299  degrees of freedom
+## Residual deviance: 1322.7  on 297  degrees of freedom
+## AIC: 1304.5
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<pre class="r"><code>m.b2 &lt;-anova(m6, m7, test=&quot;Chisq&quot;)
+m.b2</code></pre>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model 1: y ~ x1 * x2
+## Model 2: y ~ x1 + x2
+##   Resid. Df Resid. Dev Df Deviance Pr(&gt;Chi)   
+## 1       296     1277.6                        
+## 2       297     1322.7 -1  -45.155 0.001218 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><b> Case study #5: real data diamonds</b></p>
+<pre class="r"><code>#Lucy.
+#See data viz week for first steps.
+#real data always more complex
+ggplot(diamonds) +
+  geom_point(aes(carat, price, colour = cut))</code></pre>
+<p><img src="lesson4_files/figure-html/diamonds%20you%20never%20fail%20use-1.png" width="672" /></p>
+<pre class="r"><code>#so price is the most likely response we want to know about!
+#two key factors, different x.classes, cut is categorical, and carat is continous
+#look at price distribution (likely need to do by each x)
+ggplot(diamonds) +
+  geom_freqpoly(aes(price)) #long tail</code></pre>
+<p><img src="lesson4_files/figure-html/diamonds%20you%20never%20fail%20use-2.png" width="672" /></p>
+<pre class="r"><code>#now do by the two xs to see how y varies
+ggplot(diamonds, aes(carat, colour = cut)) +
+         geom_freqpoly(binwidth = 0.1)</code></pre>
+<p><img src="lesson4_files/figure-html/diamonds%20you%20never%20fail%20use-3.png" width="672" /></p>
+<pre class="r"><code>set.seed(1000)
+dsmall&lt;-diamonds[sample(nrow(diamonds), 1000), ]
+shapiro.test(dsmall$price) </code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  dsmall$price
+## W = 0.78845, p-value &lt; 2.2e-16</code></pre>
+<pre class="r"><code>qqnorm(dsmall$price)  </code></pre>
+<p><img src="lesson4_files/figure-html/diamonds%20you%20never%20fail%20use-4.png" width="672" /></p>
+<pre class="r"><code>#ok, so we have a handle on the distribution.
+#certainly non-normal.
+
+#last idea!
+#before we move to fitting a model recognizing that the data look like negative binomial or poisson given the class, what if there are a relationship between the the xs?
+#what if larger diamonds cost more and better cut diamonds costs more but there are not more better cut AND large diamonds out there? Covariation is not positive.
+
+#EDA on just that
+ggplot(diamonds, aes(cut, carat)) +
+  geom_boxplot()</code></pre>
+<p><img src="lesson4_files/figure-html/diamonds%20you%20never%20fail%20use-5.png" width="672" /></p>
+<pre class="r"><code>m8 &lt;-glm(carat~cut, data=diamonds)
+summary(m8) #looks different! More poor cut diamonds are larger...</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = carat ~ cut, data = diamonds)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -0.8261  -0.3764  -0.1064   0.2580   3.9639  
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.859299   0.002983 288.033  &lt; 2e-16 ***
+## cut.L       -0.203597   0.007991 -25.478  &lt; 2e-16 ***
+## cut.Q        0.038498   0.007123   5.405 6.52e-08 ***
+## cut.C       -0.135611   0.006199 -21.877  &lt; 2e-16 ***
+## cut^4       -0.045096   0.004998  -9.022  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for gaussian family taken to be 0.2167356)
+## 
+##     Null deviance: 12119  on 53939  degrees of freedom
+## Residual deviance: 11690  on 53935  degrees of freedom
+## AIC: 70604
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<pre class="r"><code>library(lsmeans)
+lsmeans(m8, &quot;cut&quot;, adjust=&quot;tukey&quot;) # to see ls means</code></pre>
+<pre><code>##  cut          lsmean          SE df asymp.LCL asymp.UCL
+##  Fair      1.0461366 0.011602517 NA 1.0233961 1.0688772
+##  Good      0.8491847 0.006646628 NA 0.8361575 0.8622118
+##  Very Good 0.8063814 0.004235413 NA 0.7980801 0.8146826
+##  Premium   0.8919549 0.003964307 NA 0.8841850 0.8997248
+##  Ideal     0.7028370 0.003171257 NA 0.6966214 0.7090525
+## 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code>#ok now ready for a simple model.
+library(MASS)
+m9 &lt;-glm.nb(price~carat*cut, data = diamonds)
+summary(m9)</code></pre>
+<pre><code>## 
+## Call:
+## glm.nb(formula = price ~ carat * cut, data = diamonds, init.theta = 7.433464732, 
+##     link = log)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -7.8981  -0.7526  -0.0835   0.5011   5.1836  
+## 
+## Coefficients:
+##              Estimate Std. Error  z value Pr(&gt;|z|)    
+## (Intercept)  6.290973   0.005136 1224.818  &lt; 2e-16 ***
+## carat        1.955494   0.004778  409.299  &lt; 2e-16 ***
+## cut.L       -0.363561   0.014021  -25.930  &lt; 2e-16 ***
+## cut.Q        0.300973   0.012388   24.295  &lt; 2e-16 ***
+## cut.C       -0.286111   0.010504  -27.238  &lt; 2e-16 ***
+## cut^4       -0.035146   0.008200   -4.286 1.82e-05 ***
+## carat:cut.L  0.531523   0.012490   42.555  &lt; 2e-16 ***
+## carat:cut.Q -0.325109   0.011250  -28.900  &lt; 2e-16 ***
+## carat:cut.C  0.367635   0.010142   36.249  &lt; 2e-16 ***
+## carat:cut^4  0.086441   0.008432   10.251  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for Negative Binomial(7.4335) family taken to be 1)
+## 
+##     Null deviance: 392022  on 53939  degrees of freedom
+## Residual deviance:  55084  on 53930  degrees of freedom
+## AIC: 887545
+## 
+## Number of Fisher Scoring iterations: 1
+## 
+## 
+##               Theta:  7.4335 
+##           Std. Err.:  0.0444 
+## 
+##  2 x log-likelihood:  -887523.2510</code></pre>
+<pre class="r"><code>anova(m9, test=&quot;Chisq&quot;)</code></pre>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model: Negative Binomial(7.4335), link: log
+## 
+## Response: price
+## 
+## Terms added sequentially (first to last)
+## 
+## 
+##           Df Deviance Resid. Df Resid. Dev  Pr(&gt;Chi)    
+## NULL                      53939     392022              
+## carat      1   333900     53938      58122 &lt; 2.2e-16 ***
+## cut        4      843     53934      57280 &lt; 2.2e-16 ***
+## carat:cut  4     2195     53930      55084 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><b>Tips</b><br />
+lme4 for mixed models<br />
+vegan for ordinations<br />
+Lavaan for SEMs<br />
+MASS for count and negative binomial data<br />
+(1 | factor) treats as random factor</p>
+<p>Ensure you see the different applications of the following models:<br />
+anova<br />
+lm<br />
+glm<br />
+glmm</p>
+<p><a href="http://r4ds.had.co.nz/exploratory-data-analysis.html#introduction-3">EDA from a data science perspective: predictive</a></p>
+<p><b> Practical skill outcomes of R stats useful for competency test</b><br />
+Worflow description complete now.</p>
+<p>Be able to use EDA &amp; data viz to select a model.<br />
+Be able to explore distributions of datasets.<br />
+Be able to fit descriptive models (super simple to simple).<br />
+Predictive models if you like too but not required.<br />
+Be able to examine efficiacy of a model.</p>
+<p>Recognize through application of a few models that the following rule is never broken in stats…</p>
+<p>Rule: Statistics are never prescriptive.</p>
+<p>Processes include description or prediction.<br />
+Models are powerful, purposeful tools you can use to capture &amp; communicate evidence.</p>
+<p><b>Homework</b><br />
+Revisit survey, ttc, or footprints data and end with a model.</p>
+<p><b> Readings </b></p>
+<p>Text CH9 &amp; 10</p>
+<p><a href="http://glmm.wikidot.com">GLMM for ecologists</a></p>
+<p><a href="http://avesbiodiv.mncn.csic.es/estadistica/curso2011/regm26.pdf">A practical guide to linear models</a></p>
+<p><a href="http://med.cmb.ac.lk/SMJ/VOLUME%203%20DOWNLOADS/Page%2033-37%20-%20Choosing%20the%20correct%20statistical%20test%20made%20easy.pdf">General how to choose the right test</a></p>
+<p><a href="http://abacus.bates.edu/~ganderso/biology/resources/stats_flow_chart_v2014.pdf">SUPER flowchart</a></p>
+<p><a href="https://rstudio-pubs-static.s3.amazonaws.com/119859_a290e183ff2f46b2858db66c3bc9ed3a.html">Interpreting R output</a></p>
+<div class="figure">
+<img src="flowchart.jpg" />
+
+</div>
 </div>
 
 
