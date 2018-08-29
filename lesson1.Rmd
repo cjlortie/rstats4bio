@@ -130,3 +130,12 @@ ggplot(darwin, aes(type, height)) +
   geom_boxplot()
 
 ```
+
+<b> Practical skill outcomes of R stats useful for competency test</b>  
+
+Understand the difference between R and R Studio.  
+Use scripts or R Markdown files to save all your work.  
+Be prepared to share code.  
+Load data, clean data, visualize data, then and only then begin applying statistics.  
+
+Proximately: be able to use and work with dataframes, vectors, functions, tibbles, and libraries in R.
