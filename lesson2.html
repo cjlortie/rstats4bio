@@ -223,6 +223,684 @@ $(document).ready(function () {
 <p><br></p>
 <div id="workflows-data-models" class="section level3">
 <h3>Workflows &amp; data models</h3>
+<p><img src="beemo.rodeo.png" /> worflows reproduce. openly.</p>
+<p>data wrangling more than half the battle.</p>
+<p><a href="http://www.slideshare.net/cjlortie/data-wrangling-in-r-be-a-wrangler">Data wrangling slide deck</a></p>
+<p><b> Philosophy of R stats </b></p>
+<p>Tidy data make your life easier. Data strutures should match intuition and common sense. Data should have logical structure. Rows are are observations, columns are variables. Tidy data also increase the viability that others can use your data, do better science, reuse science, and help you and your ideas survive and thrive. A workflow should also include the wrangling you did to get your data ready. If data are already very clean in a spreadsheet, they can easily become a literate, logical dataframe. Nonetheless, you should still use annotation within the introductory code to explain the meta-data of your data to some extent and what you did pre-R to get it tidy. The philosophy here is very similar to the data viz lesson forthcoming with two dominant paradigms. Base R code functions, and pipes %&gt;% and the logic embodied within the libraries associated with the the tidyverse. Generally, I prefer the tidyverse because it is more logical and much easier to remember. It also has some specific functions needed to address common errors in modern data structures with little code needed to fix them up.</p>
+<p><b>Worflow if in base R</b><br />
+template for r-script meta-data #### author: cjlortie date: 2016 purpose:</p>
+<p>set-up #### rm(list=ls()) getwd() setwd(“~/r”)</p>
+<p>read &amp; check data #### data &lt;-read.csv(“filename.csv”) names() dim() str() summary(data)</p>
+<p>visualize ####</p>
+<p>check assumptions ####</p>
+<p>model data and test hypothesis ####</p>
+<p><b>Data wrangling</b></p>
+<p><b>Base R</b> key concepts: aggregate tapply sapply lappy subsetting as.factor is.numeric na</p>
+<p><b>tidyverse</b> key concepts: pipes are you best friend! %&gt;%</p>
+<p>dplyr filter for rows select for columns mutate for new variables summarise for bringing together many values</p>
+<p><a href="http://www.computerworld.com/article/2921176/business-intelligence/great-r-packages-for-data-import-wrangling-visualization.html">Excellent list of wrangling tools</a></p>
+<p><a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">Cheatsheet</a></p>
+<p><a href="https://cran.r-project.org/web/packages/tidyr/README.html">tidyr</a></p>
+<p><a href="https://www.rstudio.com/resources/webinars/data-wrangling-with-r-and-rstudio/">Great wrangling webinar</a></p>
+<p>We will cover two basic challenges you will certainly encounter.</p>
+<p><b>Missing data </b></p>
+<pre class="r"><code>#Missing data. In error, missing cells/observations in some measure can kick back an error. In other apps, sometimes ignored but can introduce error.
+ttc &lt;-read.csv(&quot;data/ttc.csv&quot;)
+str(ttc)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    31 obs. of  32 variables:
+##  $ FARE.MEDIA: Factor w/ 21 levels &quot;     BLIND/WAR AMPS&quot;,..: 19 13 12 16 10 11 7 14 15 2 ...
+##  $ X2015     : int  NA 110945 NA NA 13323 204509 48396 NA 8843 48873 ...
+##  $ X2014     : int  NA 111157 NA NA 9862 214932 42855 NA 9361 49120 ...
+##  $ X2013     : int  NA 112360 NA NA 8194 213982 38426 NA 9557 48623 ...
+##  $ X2012     : int  NA 117962 NA NA 4399 205086 35019 NA 10185 46467 ...
+##  $ X2011     : int  NA 124748 NA NA 1139 194928 32091 NA 9893 43795 ...
+##  $ X2010     : int  NA 120366 1298 NA 0 203101 9200 NA 9237 43149 ...
+##  $ X2009     : int  NA 114686 8807 NA 0 208172 NA NA 8738 41445 ...
+##  $ X2008     : int  NA 94210 34445 NA NA 203313 NA NA 7517 39408 ...
+##  $ X2007     : int  NA 69134 65398 NA NA 195001 NA NA 7126 36317 ...
+##  $ X2006     : int  NA 75340 68546 NA NA 171314 NA NA 5413 38684 ...
+##  $ X2005     : int  NA 82162 73151 NA NA 140594 NA NA 1296 47521 ...
+##  $ X2004     : int  NA 80859 72952 NA NA 125836 NA NA NA 55172 ...
+##  $ X2003     : int  NA 80330 71485 NA NA 119681 NA NA NA 51328 ...
+##  $ X2002     : int  NA 82102 74578 NA NA 116805 NA 762 NA 51052 ...
+##  $ X2001     : int  NA 83771 70930 NA NA 118176 NA 1118 NA 58400 ...
+##  $ X2000     : int  NA 82218 66331 NA NA 112081 NA 1105 NA 61539 ...
+##  $ X1999     : int  NA 83028 64109 NA NA 103447 NA 1430 NA 54835 ...
+##  $ X1998     : int  NA 85303 66490 NA NA 98473 NA 1649 NA 49658 ...
+##  $ X1997     : int  NA 86991 66177 NA NA 91521 NA 1592 NA 46209 ...
+##  $ X1996     : int  NA 87857 67164 4329 NA 86549 NA 1652 NA 32642 ...
+##  $ X1995     : int  NA 87775 70369 12525 NA 96803 NA 1976 NA 20930 ...
+##  $ X1994     : int  NA 97877 62700 13265 NA 96907 NA 2111 NA 20708 ...
+##  $ X1993     : int  NA 104016 57710 12894 NA 100607 NA 2514 NA 22131 ...
+##  $ X1992     : int  NA 114064 53655 11201 NA 109509 NA 2924 NA 23696 ...
+##  $ X1991     : int  NA 111365 35788 17927 NA 108148 NA 3235 NA 60034 ...
+##  $ X1990     : int  NA 119538 38369 22313 NA 116610 NA 2758 NA 67296 ...
+##  $ X1989     : int  NA 114874 37401 27025 NA 113506 NA NA NA 65665 ...
+##  $ X1988     : int  NA 122180 39514 18837 NA 119264 NA NA NA 66872 ...
+##  $ X1987     : int  NA 127088 38944 8976 NA 109151 NA NA NA 75308 ...
+##  $ X1986     : int  NA 126217 42052 7347 NA 101901 NA NA NA 66475 ...
+##  $ X1985     : int  NA 128207 48793 NA NA 94970 NA NA NA 63986 ...</code></pre>
+<pre class="r"><code>#check for missing values
+is.na(ttc)</code></pre>
+<pre><code>##       FARE.MEDIA X2015 X2014 X2013 X2012 X2011 X2010 X2009 X2008 X2007
+##  [1,]      FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+##  [2,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [3,]      FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE
+##  [4,]      FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+##  [5,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE
+##  [6,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [7,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE
+##  [8,]      FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+##  [9,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [10,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [11,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [12,]      FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [13,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [14,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [15,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [16,]      FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [17,]      FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [18,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [19,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [20,]      FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [21,]      FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [22,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [23,]      FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [24,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [25,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [26,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [27,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [28,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [29,]      FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [30,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [31,]      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##       X2006 X2005 X2004 X2003 X2002 X2001 X2000 X1999 X1998 X1997 X1996
+##  [1,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+##  [2,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [3,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [4,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE
+##  [5,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+##  [6,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [7,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+##  [8,]  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [9,] FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [10,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [11,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [12,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [13,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [14,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [15,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [16,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [17,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [18,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [19,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [20,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [21,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [22,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [23,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [24,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [25,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [26,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [27,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [28,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [29,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [30,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [31,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##       X1995 X1994 X1993 X1992 X1991 X1990 X1989 X1988 X1987 X1986 X1985
+##  [1,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+##  [2,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [3,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [4,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE
+##  [5,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+##  [6,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [7,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+##  [8,] FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
+##  [9,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [10,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [11,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [12,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [13,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [14,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [15,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [16,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE
+## [17,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [18,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [19,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [20,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [21,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [22,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [23,]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [24,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [25,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [26,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [27,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [28,] FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [29,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [30,] FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [31,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
+<pre class="r"><code>summary(ttc, na.rm=TRUE) #excludes NA</code></pre>
+<pre><code>##             FARE.MEDIA     X2015            X2014            X2013       
+##       CASH       : 3   Min.   :    10   Min.   :    12   Min.   :   401  
+##       PRESTO     : 3   1st Qu.:  1076   1st Qu.:  6087   1st Qu.:  7118  
+##       TICKETS    : 3   Median : 12170   Median : 10802   Median : 10850  
+##    SUB-TOTAL     : 3   Mean   : 68974   Mean   : 75560   Mean   : 77843  
+##       WEEKLY PASS: 2   3rd Qu.: 48634   3rd Qu.: 49120   3rd Qu.: 52732  
+##      TWO-FARE    : 2   Max.   :534005   Max.   :534815   Max.   :525194  
+##  (Other)         :15   NA&#39;s   :8        NA&#39;s   :10       NA&#39;s   :11      
+##      X2012            X2011            X2010            X2009       
+##  Min.   :   372   Min.   :   344   Min.   :     0   Min.   :     0  
+##  1st Qu.:  5141   1st Qu.:  4840   1st Qu.:  2539   1st Qu.:  4747  
+##  Median : 11224   Median : 10690   Median :  9237   Median :  9844  
+##  Mean   : 76162   Mean   : 74148   Mean   : 67353   Mean   : 69782  
+##  3rd Qu.: 51249   3rd Qu.: 49146   3rd Qu.: 43149   3rd Qu.: 46170  
+##  Max.   :514007   Max.   :500219   Max.   :477357   Max.   :471233  
+##  NA&#39;s   :11       NA&#39;s   :11       NA&#39;s   :10       NA&#39;s   :11      
+##      X2008            X2007            X2006            X2005       
+##  Min.   :   310   Min.   :   295   Min.   :    58   Min.   :    93  
+##  1st Qu.:  5334   1st Qu.:  4752   1st Qu.:  3978   1st Qu.:  3261  
+##  Median : 11035   Median : 10892   Median : 10120   Median :  9606  
+##  Mean   : 72806   Mean   : 71736   Mean   : 65906   Mean   : 63984  
+##  3rd Qu.: 49701   3rd Qu.: 62491   3rd Qu.: 61156   3rd Qu.: 63630  
+##  Max.   :466700   Max.   :459769   Max.   :444544   Max.   :431220  
+##  NA&#39;s   :12       NA&#39;s   :12       NA&#39;s   :11       NA&#39;s   :11      
+##      X2004            X2003            X2002            X2001       
+##  Min.   :     0   Min.   :     0   Min.   :     0   Min.   :     0  
+##  1st Qu.:  4184   1st Qu.:  3805   1st Qu.:  3264   1st Qu.:  2800  
+##  Median :  9940   Median : 10586   Median : 10404   Median : 10765  
+##  Mean   : 65379   Mean   : 63412   Mean   : 61538   Mean   : 62471  
+##  3rd Qu.: 66028   3rd Qu.: 65337   3rd Qu.: 64830   3rd Qu.: 65670  
+##  Max.   :418099   Max.   :405412   Max.   :415539   Max.   :419993  
+##  NA&#39;s   :12       NA&#39;s   :12       NA&#39;s   :11       NA&#39;s   :11      
+##      X2000            X1999            X1998            X1997       
+##  Min.   :     0   Min.   :     0   Min.   :     0   Min.   :     0  
+##  1st Qu.:  2558   1st Qu.:  2370   1st Qu.:  2283   1st Qu.:  1834  
+##  Median : 10593   Median :  9655   Median :  9530   Median :  9157  
+##  Mean   : 61079   Mean   : 58365   Mean   : 57806   Mean   : 56543  
+##  3rd Qu.: 64276   3rd Qu.: 62428   3rd Qu.: 64004   3rd Qu.: 65008  
+##  Max.   :410558   Max.   :392593   Max.   :388689   Max.   :379883  
+##  NA&#39;s   :11       NA&#39;s   :11       NA&#39;s   :11       NA&#39;s   :11      
+##      X1996            X1995            X1994            X1993       
+##  Min.   :     0   Min.   :     0   Min.   :     0   Min.   :     0  
+##  1st Qu.:  1652   1st Qu.:  1976   1st Qu.:  2111   1st Qu.:  2507  
+##  Median :  9098   Median : 11338   Median : 12192   Median : 12544  
+##  Mean   : 52806   Mean   : 55031   Mean   : 55096   Mean   : 58668  
+##  3rd Qu.: 67164   3rd Qu.: 70369   3rd Qu.: 62700   3rd Qu.: 61242  
+##  Max.   :372430   Max.   :388152   Max.   :388252   Max.   :393485  
+##  NA&#39;s   :10       NA&#39;s   :10       NA&#39;s   :10       NA&#39;s   :11      
+##      X1992            X1991            X1990            X1989       
+##  Min.   :     0   Min.   :     0   Min.   :     0   Min.   :     0  
+##  1st Qu.:  1858   1st Qu.:  2904   1st Qu.:  2914   1st Qu.:  2388  
+##  Median : 11385   Median : 14268   Median : 15488   Median : 15177  
+##  Mean   : 60409   Mean   : 66712   Mean   : 72297   Mean   : 70940  
+##  3rd Qu.: 60610   3rd Qu.: 64236   3rd Qu.: 70048   3rd Qu.: 69216  
+##  Max.   :404251   Max.   :424167   Max.   :459234   Max.   :450726  
+##  NA&#39;s   :11       NA&#39;s   :12       NA&#39;s   :12       NA&#39;s   :12      
+##      X1988            X1987            X1986            X1985       
+##  Min.   :     0   Min.   :     0   Min.   :     0   Min.   :     0  
+##  1st Qu.:  2525   1st Qu.:  3608   1st Qu.:  3427   1st Qu.:  2519  
+##  Median : 16369   Median : 14344   Median : 13996   Median : 15652  
+##  Mean   : 72982   Mean   : 75921   Mean   : 73280   Mean   : 76044  
+##  3rd Qu.: 71772   3rd Qu.: 76750   3rd Qu.: 74446   3rd Qu.: 76829  
+##  Max.   :463475   Max.   :456884   Max.   :441012   Max.   :432160  
+##  NA&#39;s   :12       NA&#39;s   :13       NA&#39;s   :13       NA&#39;s   :14</code></pre>
+<pre class="r"><code>new.ttc &lt;-na.omit(ttc) # returns without missing values
+is.na(new.ttc) #check to see if it worked</code></pre>
+<pre><code>##    FARE.MEDIA X2015 X2014 X2013 X2012 X2011 X2010 X2009 X2008 X2007 X2006
+## 2       FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 6       FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 10      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 11      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 13      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 14      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 15      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 18      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 19      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 22      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 24      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 25      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 26      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 27      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 31      FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##    X2005 X2004 X2003 X2002 X2001 X2000 X1999 X1998 X1997 X1996 X1995 X1994
+## 2  FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 6  FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 10 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 11 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 13 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 14 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 15 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 18 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 19 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 22 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 24 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 25 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 26 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 27 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 31 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##    X1993 X1992 X1991 X1990 X1989 X1988 X1987 X1986 X1985
+## 2  FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 6  FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 10 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 11 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 13 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 14 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 15 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 18 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 19 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 22 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 24 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 25 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 26 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 27 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 31 FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
+<pre class="r"><code>#many other solutions but I use these two frequently</code></pre>
+<p><b>Selecting part of a dataset </b></p>
+<pre class="r"><code>library(tidyverse)
+survey&lt;-read_csv(&quot;data/5081.survey.1.csv&quot;)
+str(survey)</code></pre>
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    18 obs. of  4 variables:
+##  $ r.experience : int  2 1 2 3 1 1 3 1 1 3 ...
+##  $ discipline   : chr  &quot;physiology&quot; &quot;genetics&quot; &quot;physiology&quot; &quot;physiology&quot; ...
+##  $ research.data: chr  &quot;quantitative&quot; &quot;quantitative&quot; &quot;quantitative&quot; &quot;quantitative&quot; ...
+##  $ r.studio     : chr  &quot;No&quot; &quot;Yes&quot; &quot;Yes&quot; &quot;Yes&quot; ...
+##  - attr(*, &quot;spec&quot;)=List of 2
+##   ..$ cols   :List of 4
+##   .. ..$ r.experience : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_integer&quot; &quot;collector&quot;
+##   .. ..$ discipline   : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   .. ..$ research.data: list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   .. ..$ r.studio     : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   ..$ default: list()
+##   .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_guess&quot; &quot;collector&quot;
+##   ..- attr(*, &quot;class&quot;)= chr &quot;col_spec&quot;</code></pre>
+<pre class="r"><code>#I want just a simple dataframe with experience by discipline
+
+experience &lt;- survey %&gt;% select(discipline, r.experience)
+experience</code></pre>
+<pre><code>## # A tibble: 18 x 2
+##    discipline            r.experience
+##    &lt;chr&gt;                        &lt;int&gt;
+##  1 physiology                       2
+##  2 genetics                         1
+##  3 physiology                       2
+##  4 physiology                       3
+##  5 ecology                          1
+##  6 physiology                       1
+##  7 ecology                          3
+##  8 ecology                          1
+##  9 ecology                          1
+## 10 genetics                         3
+## 11 ecology                          3
+## 12 ecology                          1
+## 13 physiology                       1
+## 14 physiology                       2
+## 15 environmental science            1
+## 16 physiology                       1
+## 17 physiology                       1
+## 18 physiology                       2</code></pre>
+<pre class="r"><code>#Now I just want to select the physiology folks
+physiologists &lt;- experience %&gt;% filter(discipline == &quot;physiology&quot;)
+physiologists</code></pre>
+<pre><code>## # A tibble: 9 x 2
+##   discipline r.experience
+##   &lt;chr&gt;             &lt;int&gt;
+## 1 physiology            2
+## 2 physiology            2
+## 3 physiology            3
+## 4 physiology            1
+## 5 physiology            1
+## 6 physiology            2
+## 7 physiology            1
+## 8 physiology            1
+## 9 physiology            2</code></pre>
+<pre class="r"><code>#Selections also often include a summary by levels or I want to make a new column with some calculations. Think about what you have likely done in excel.
+
+#used pipes and made a nice summary table
+experience &lt;-survey %&gt;% group_by(discipline) %&gt;% summarise(
+  count = n(),
+  exp = mean (r.experience)
+)
+
+#What if I just want to make a new column to my dataframe that is a sum, a calculation, or some addition
+ttc.5.years &lt;- ttc %&gt;% mutate(five.year.sum = X2015+X2014+X2013+X2012+X2011)
+str(ttc.5.years)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    31 obs. of  33 variables:
+##  $ FARE.MEDIA   : Factor w/ 21 levels &quot;     BLIND/WAR AMPS&quot;,..: 19 13 12 16 10 11 7 14 15 2 ...
+##  $ X2015        : int  NA 110945 NA NA 13323 204509 48396 NA 8843 48873 ...
+##  $ X2014        : int  NA 111157 NA NA 9862 214932 42855 NA 9361 49120 ...
+##  $ X2013        : int  NA 112360 NA NA 8194 213982 38426 NA 9557 48623 ...
+##  $ X2012        : int  NA 117962 NA NA 4399 205086 35019 NA 10185 46467 ...
+##  $ X2011        : int  NA 124748 NA NA 1139 194928 32091 NA 9893 43795 ...
+##  $ X2010        : int  NA 120366 1298 NA 0 203101 9200 NA 9237 43149 ...
+##  $ X2009        : int  NA 114686 8807 NA 0 208172 NA NA 8738 41445 ...
+##  $ X2008        : int  NA 94210 34445 NA NA 203313 NA NA 7517 39408 ...
+##  $ X2007        : int  NA 69134 65398 NA NA 195001 NA NA 7126 36317 ...
+##  $ X2006        : int  NA 75340 68546 NA NA 171314 NA NA 5413 38684 ...
+##  $ X2005        : int  NA 82162 73151 NA NA 140594 NA NA 1296 47521 ...
+##  $ X2004        : int  NA 80859 72952 NA NA 125836 NA NA NA 55172 ...
+##  $ X2003        : int  NA 80330 71485 NA NA 119681 NA NA NA 51328 ...
+##  $ X2002        : int  NA 82102 74578 NA NA 116805 NA 762 NA 51052 ...
+##  $ X2001        : int  NA 83771 70930 NA NA 118176 NA 1118 NA 58400 ...
+##  $ X2000        : int  NA 82218 66331 NA NA 112081 NA 1105 NA 61539 ...
+##  $ X1999        : int  NA 83028 64109 NA NA 103447 NA 1430 NA 54835 ...
+##  $ X1998        : int  NA 85303 66490 NA NA 98473 NA 1649 NA 49658 ...
+##  $ X1997        : int  NA 86991 66177 NA NA 91521 NA 1592 NA 46209 ...
+##  $ X1996        : int  NA 87857 67164 4329 NA 86549 NA 1652 NA 32642 ...
+##  $ X1995        : int  NA 87775 70369 12525 NA 96803 NA 1976 NA 20930 ...
+##  $ X1994        : int  NA 97877 62700 13265 NA 96907 NA 2111 NA 20708 ...
+##  $ X1993        : int  NA 104016 57710 12894 NA 100607 NA 2514 NA 22131 ...
+##  $ X1992        : int  NA 114064 53655 11201 NA 109509 NA 2924 NA 23696 ...
+##  $ X1991        : int  NA 111365 35788 17927 NA 108148 NA 3235 NA 60034 ...
+##  $ X1990        : int  NA 119538 38369 22313 NA 116610 NA 2758 NA 67296 ...
+##  $ X1989        : int  NA 114874 37401 27025 NA 113506 NA NA NA 65665 ...
+##  $ X1988        : int  NA 122180 39514 18837 NA 119264 NA NA NA 66872 ...
+##  $ X1987        : int  NA 127088 38944 8976 NA 109151 NA NA NA 75308 ...
+##  $ X1986        : int  NA 126217 42052 7347 NA 101901 NA NA NA 66475 ...
+##  $ X1985        : int  NA 128207 48793 NA NA 94970 NA NA NA 63986 ...
+##  $ five.year.sum: int  NA 577172 NA NA 36917 1033437 196787 NA 47839 236878 ...</code></pre>
+<pre class="r"><code>str(ttc)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    31 obs. of  32 variables:
+##  $ FARE.MEDIA: Factor w/ 21 levels &quot;     BLIND/WAR AMPS&quot;,..: 19 13 12 16 10 11 7 14 15 2 ...
+##  $ X2015     : int  NA 110945 NA NA 13323 204509 48396 NA 8843 48873 ...
+##  $ X2014     : int  NA 111157 NA NA 9862 214932 42855 NA 9361 49120 ...
+##  $ X2013     : int  NA 112360 NA NA 8194 213982 38426 NA 9557 48623 ...
+##  $ X2012     : int  NA 117962 NA NA 4399 205086 35019 NA 10185 46467 ...
+##  $ X2011     : int  NA 124748 NA NA 1139 194928 32091 NA 9893 43795 ...
+##  $ X2010     : int  NA 120366 1298 NA 0 203101 9200 NA 9237 43149 ...
+##  $ X2009     : int  NA 114686 8807 NA 0 208172 NA NA 8738 41445 ...
+##  $ X2008     : int  NA 94210 34445 NA NA 203313 NA NA 7517 39408 ...
+##  $ X2007     : int  NA 69134 65398 NA NA 195001 NA NA 7126 36317 ...
+##  $ X2006     : int  NA 75340 68546 NA NA 171314 NA NA 5413 38684 ...
+##  $ X2005     : int  NA 82162 73151 NA NA 140594 NA NA 1296 47521 ...
+##  $ X2004     : int  NA 80859 72952 NA NA 125836 NA NA NA 55172 ...
+##  $ X2003     : int  NA 80330 71485 NA NA 119681 NA NA NA 51328 ...
+##  $ X2002     : int  NA 82102 74578 NA NA 116805 NA 762 NA 51052 ...
+##  $ X2001     : int  NA 83771 70930 NA NA 118176 NA 1118 NA 58400 ...
+##  $ X2000     : int  NA 82218 66331 NA NA 112081 NA 1105 NA 61539 ...
+##  $ X1999     : int  NA 83028 64109 NA NA 103447 NA 1430 NA 54835 ...
+##  $ X1998     : int  NA 85303 66490 NA NA 98473 NA 1649 NA 49658 ...
+##  $ X1997     : int  NA 86991 66177 NA NA 91521 NA 1592 NA 46209 ...
+##  $ X1996     : int  NA 87857 67164 4329 NA 86549 NA 1652 NA 32642 ...
+##  $ X1995     : int  NA 87775 70369 12525 NA 96803 NA 1976 NA 20930 ...
+##  $ X1994     : int  NA 97877 62700 13265 NA 96907 NA 2111 NA 20708 ...
+##  $ X1993     : int  NA 104016 57710 12894 NA 100607 NA 2514 NA 22131 ...
+##  $ X1992     : int  NA 114064 53655 11201 NA 109509 NA 2924 NA 23696 ...
+##  $ X1991     : int  NA 111365 35788 17927 NA 108148 NA 3235 NA 60034 ...
+##  $ X1990     : int  NA 119538 38369 22313 NA 116610 NA 2758 NA 67296 ...
+##  $ X1989     : int  NA 114874 37401 27025 NA 113506 NA NA NA 65665 ...
+##  $ X1988     : int  NA 122180 39514 18837 NA 119264 NA NA NA 66872 ...
+##  $ X1987     : int  NA 127088 38944 8976 NA 109151 NA NA NA 75308 ...
+##  $ X1986     : int  NA 126217 42052 7347 NA 101901 NA NA NA 66475 ...
+##  $ X1985     : int  NA 128207 48793 NA NA 94970 NA NA NA 63986 ...</code></pre>
+<pre class="r"><code>#so we made a new column.
+#can do this to original dataframe too without making new object
+ttc %&gt;% mutate(five.year.sum = X2015+X2014+X2013+X2012+X2011)</code></pre>
+<pre><code>##                   FARE.MEDIA  X2015  X2014  X2013  X2012  X2011  X2010
+## 1                      ADULT     NA     NA     NA     NA     NA     NA
+## 2                     TOKENS 110945 111157 112360 117962 124748 120366
+## 3                    TICKETS     NA     NA     NA     NA     NA   1298
+## 4                   TWO-FARE     NA     NA     NA     NA     NA     NA
+## 5                     PRESTO  13323   9862   8194   4399   1139      0
+## 6       REGULAR MONTHLY PASS 204509 214932 213982 205086 194928 203101
+## 7        POST-SECONDARY PASS  48396  42855  38426  35019  32091   9200
+## 8               TWIN-GO PASS     NA     NA     NA     NA     NA     NA
+## 9                WEEKLY PASS   8843   9361   9557  10185   9893   9237
+## 10                      CASH  48873  49120  48623  46467  43795  43149
+## 11                 SUB-TOTAL 434889 437287 431142 419118 406594 386351
+## 12            SENIOR/STUDENT     NA     NA     NA     NA     NA     NA
+## 13              MONTHLY PASS  25092  23064  20509  19769  18590  17169
+## 14               WEEKLY PASS    672    515    540    624    702    814
+## 15                   TICKETS  32595  33408  35472  37039  38299  38674
+## 16                  TWO-FARE     NA     NA     NA     NA     NA     NA
+## 17                    PRESTO    438     12     NA     NA     NA     NA
+## 18                      CASH  12170  12037   8538   8164   7609   5856
+## 19                 SUB-TOTAL  70967  69036  65059  65596  65200  62513
+## 20                  CHILDREN     NA     NA     NA     NA     NA     NA
+## 21                FREE RIDES  10939     NA     NA     NA     NA     NA
+## 22                   TICKETS   1066   7097   7563   7929   8304   8287
+## 23                    PRESTO     10     NA     NA     NA     NA     NA
+## 24                      CASH    526   3705   2708   2589   2433   2539
+## 25                 SUB-TOTAL  12541  10802  10271  10518  10737  10826
+## 26           DAY/VIST./OTHER   8561  10033  11428  11929  10642  10605
+## 27            BLIND/WAR AMPS   1086   1119   1109   1086   1060   1073
+## 28           PREMIUM EXPRESS    490    451    401    372    344    322
+## 29           POSTAL CARRIERS     NA     NA     NA     NA     NA     NA
+## 30                  GTA PASS   5471   6087   5784   5388   5642   5667
+## 31              SYSTEM TOTAL 534005 534815 525194 514007 500219 477357
+##     X2009  X2008  X2007  X2006  X2005  X2004  X2003  X2002  X2001  X2000
+## 1      NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 2  114686  94210  69134  75340  82162  80859  80330  82102  83771  82218
+## 3    8807  34445  65398  68546  73151  72952  71485  74578  70930  66331
+## 4      NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 5       0     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 6  208172 203313 195001 171314 140594 125836 119681 116805 118176 112081
+## 7      NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 8      NA     NA     NA     NA     NA     NA     NA    762   1118   1105
+## 9    8738   7517   7126   5413   1296     NA     NA     NA     NA     NA
+## 10  41445  39408  36317  38684  47521  55172  51328  51052  58400  61539
+## 11 381848 378893 372976 359297 344724 334819 322824 325299 332395 323274
+## 12     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 13  15331  14864  14506  12931  11068   9940  10586  11123  12397  11785
+## 14    874    780    686    372     93      0      0      0      0      0
+## 15  38615  39097  40181  40808  42746  41562  41844  44018  44012  43885
+## 16     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 17     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 18   5526   5253   4211   4581   6549   7602   6759   6440   7507   7921
+## 19  60346  59994  59584  58692  60456  59104  59189  61581  63916  63591
+## 20     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 21     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 22   8562   8782   8959   8879   8143   7573   7915   8869   9133   9401
+## 23     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 24   2410   2253   1933   2168   3916   4514   4072   3938   3999   4203
+## 25  10972  11035  10892  11047  12059  12087  11987  12807  13132  13604
+## 26  10880   9961   9636   9194   7598   6191   5817   9685   4943   4837
+## 27   1074   1092   1094   1025   1026   1065   1113   1275   1223   1138
+## 28    313    310    295    259    260    278    280    282    339    330
+## 29     NA     NA     NA     58    702    700    664    683    719    753
+## 30   5800   5415   5292   4972   4395   3855   3538   3927   3326   3031
+## 31 471233 466700 459769 444544 431220 418099 405412 415539 419993 410558
+##     X1999  X1998  X1997  X1996  X1995  X1994  X1993  X1992  X1991  X1990
+## 1      NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 2   83028  85303  86991  87857  87775  97877 104016 114064 111365 119538
+## 3   64109  66490  66177  67164  70369  62700  57710  53655  35788  38369
+## 4      NA     NA     NA   4329  12525  13265  12894  11201  17927  22313
+## 5      NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 6  103447  98473  91521  86549  96803  96907 100607 109509 108148 116610
+## 7      NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 8    1430   1649   1592   1652   1976   2111   2514   2924   3235   2758
+## 9      NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 10  54835  49658  46209  32642  20930  20708  22131  23696  60034  67296
+## 11 306849 301573 292490 280193 290378 293568 299872 315049 336497 366884
+## 12     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 13  10124   9419   8647   9098  11028  10716  10508  10389   5850   5117
+## 14      0      0      0      0      0      0      0      0      0      0
+## 15  44263  46559  48306  52852  58515  56539  56625  57082  56559  61358
+## 16     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 17     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 18   7481   7197   7665   8114   5202   4772   4703   3725   6030   6324
+## 19  61868  63175  64618  70064  74745  72027  71836  71196  68439  72799
+## 20     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 21     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 22   9186   9640   9667  10129  11338  12192  12193  11569  11722  12417
+## 23     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 24   4209   4344   4313   3674   2877   2717   2486   1860   2546   3071
+## 25  13395  13984  13980  13803  14215  14909  14679  13429  14268  15488
+## 26   5576   5236   4611   4234   4833   4764   4228   1853   2572    972
+## 27   1131   1137   1057   1057   1059   1119   1122   1127   1093   1098
+## 28    301    307    310    322    425    437    417    257     NA     NA
+## 29    790    783    902   1107   1122   1085   1331   1340   1298   1993
+## 30   2683   2494   1915   1650   1375    343     NA     NA     NA     NA
+## 31 392593 388689 379883 372430 388152 388252 393485 404251 424167 459234
+##     X1989  X1988  X1987  X1986  X1985 five.year.sum
+## 1      NA     NA     NA     NA     NA            NA
+## 2  114874 122180 127088 126217 128207        577172
+## 3   37401  39514  38944  42052  48793            NA
+## 4   27025  18837   8976   7347     NA            NA
+## 5      NA     NA     NA     NA     NA         36917
+## 6  113506 119264 109151 101901  94970       1033437
+## 7      NA     NA     NA     NA     NA        196787
+## 8      NA     NA     NA     NA     NA            NA
+## 9      NA     NA     NA     NA     NA         47839
+## 10  65665  66872  75308  66475  63986        236878
+## 11 358471 366667 359467 343992 335956       2129030
+## 12     NA     NA     NA     NA     NA            NA
+## 13   4570   4541   3855   3288   2519        107024
+## 14      0      0      0      0      0          3053
+## 15  61837  65708  65927  62963  61193        176813
+## 16     93     63     NA     NA     NA            NA
+## 17     NA     NA     NA     NA     NA            NA
+## 18   6267   6359   7449  10852  13117         48518
+## 19  72767  76671  77231  77103  76829        335858
+## 20     NA     NA     NA     NA     NA            NA
+## 21     NA     NA     NA     NA     NA            NA
+## 22  12261  13194  12581  12074  10884         31959
+## 23     NA     NA     NA     NA     NA            NA
+## 24   2916   3175   3526   3844   4768         11961
+## 25  15177  16369  16107  15918  15652         54869
+## 26   1312    641    612    649    630         52593
+## 27   1139   1252   1593   1506   1272          5460
+## 28     NA     NA     NA     NA     NA          2058
+## 29   1860   1875   1874   1844   1821            NA
+## 30     NA     NA     NA     NA     NA         28372
+## 31 450726 463475 456884 441012 432160       2608240</code></pre>
+<pre class="r"><code>ttc</code></pre>
+<pre><code>##                   FARE.MEDIA  X2015  X2014  X2013  X2012  X2011  X2010
+## 1                      ADULT     NA     NA     NA     NA     NA     NA
+## 2                     TOKENS 110945 111157 112360 117962 124748 120366
+## 3                    TICKETS     NA     NA     NA     NA     NA   1298
+## 4                   TWO-FARE     NA     NA     NA     NA     NA     NA
+## 5                     PRESTO  13323   9862   8194   4399   1139      0
+## 6       REGULAR MONTHLY PASS 204509 214932 213982 205086 194928 203101
+## 7        POST-SECONDARY PASS  48396  42855  38426  35019  32091   9200
+## 8               TWIN-GO PASS     NA     NA     NA     NA     NA     NA
+## 9                WEEKLY PASS   8843   9361   9557  10185   9893   9237
+## 10                      CASH  48873  49120  48623  46467  43795  43149
+## 11                 SUB-TOTAL 434889 437287 431142 419118 406594 386351
+## 12            SENIOR/STUDENT     NA     NA     NA     NA     NA     NA
+## 13              MONTHLY PASS  25092  23064  20509  19769  18590  17169
+## 14               WEEKLY PASS    672    515    540    624    702    814
+## 15                   TICKETS  32595  33408  35472  37039  38299  38674
+## 16                  TWO-FARE     NA     NA     NA     NA     NA     NA
+## 17                    PRESTO    438     12     NA     NA     NA     NA
+## 18                      CASH  12170  12037   8538   8164   7609   5856
+## 19                 SUB-TOTAL  70967  69036  65059  65596  65200  62513
+## 20                  CHILDREN     NA     NA     NA     NA     NA     NA
+## 21                FREE RIDES  10939     NA     NA     NA     NA     NA
+## 22                   TICKETS   1066   7097   7563   7929   8304   8287
+## 23                    PRESTO     10     NA     NA     NA     NA     NA
+## 24                      CASH    526   3705   2708   2589   2433   2539
+## 25                 SUB-TOTAL  12541  10802  10271  10518  10737  10826
+## 26           DAY/VIST./OTHER   8561  10033  11428  11929  10642  10605
+## 27            BLIND/WAR AMPS   1086   1119   1109   1086   1060   1073
+## 28           PREMIUM EXPRESS    490    451    401    372    344    322
+## 29           POSTAL CARRIERS     NA     NA     NA     NA     NA     NA
+## 30                  GTA PASS   5471   6087   5784   5388   5642   5667
+## 31              SYSTEM TOTAL 534005 534815 525194 514007 500219 477357
+##     X2009  X2008  X2007  X2006  X2005  X2004  X2003  X2002  X2001  X2000
+## 1      NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 2  114686  94210  69134  75340  82162  80859  80330  82102  83771  82218
+## 3    8807  34445  65398  68546  73151  72952  71485  74578  70930  66331
+## 4      NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 5       0     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 6  208172 203313 195001 171314 140594 125836 119681 116805 118176 112081
+## 7      NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 8      NA     NA     NA     NA     NA     NA     NA    762   1118   1105
+## 9    8738   7517   7126   5413   1296     NA     NA     NA     NA     NA
+## 10  41445  39408  36317  38684  47521  55172  51328  51052  58400  61539
+## 11 381848 378893 372976 359297 344724 334819 322824 325299 332395 323274
+## 12     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 13  15331  14864  14506  12931  11068   9940  10586  11123  12397  11785
+## 14    874    780    686    372     93      0      0      0      0      0
+## 15  38615  39097  40181  40808  42746  41562  41844  44018  44012  43885
+## 16     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 17     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 18   5526   5253   4211   4581   6549   7602   6759   6440   7507   7921
+## 19  60346  59994  59584  58692  60456  59104  59189  61581  63916  63591
+## 20     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 21     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 22   8562   8782   8959   8879   8143   7573   7915   8869   9133   9401
+## 23     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 24   2410   2253   1933   2168   3916   4514   4072   3938   3999   4203
+## 25  10972  11035  10892  11047  12059  12087  11987  12807  13132  13604
+## 26  10880   9961   9636   9194   7598   6191   5817   9685   4943   4837
+## 27   1074   1092   1094   1025   1026   1065   1113   1275   1223   1138
+## 28    313    310    295    259    260    278    280    282    339    330
+## 29     NA     NA     NA     58    702    700    664    683    719    753
+## 30   5800   5415   5292   4972   4395   3855   3538   3927   3326   3031
+## 31 471233 466700 459769 444544 431220 418099 405412 415539 419993 410558
+##     X1999  X1998  X1997  X1996  X1995  X1994  X1993  X1992  X1991  X1990
+## 1      NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 2   83028  85303  86991  87857  87775  97877 104016 114064 111365 119538
+## 3   64109  66490  66177  67164  70369  62700  57710  53655  35788  38369
+## 4      NA     NA     NA   4329  12525  13265  12894  11201  17927  22313
+## 5      NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 6  103447  98473  91521  86549  96803  96907 100607 109509 108148 116610
+## 7      NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 8    1430   1649   1592   1652   1976   2111   2514   2924   3235   2758
+## 9      NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 10  54835  49658  46209  32642  20930  20708  22131  23696  60034  67296
+## 11 306849 301573 292490 280193 290378 293568 299872 315049 336497 366884
+## 12     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 13  10124   9419   8647   9098  11028  10716  10508  10389   5850   5117
+## 14      0      0      0      0      0      0      0      0      0      0
+## 15  44263  46559  48306  52852  58515  56539  56625  57082  56559  61358
+## 16     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 17     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 18   7481   7197   7665   8114   5202   4772   4703   3725   6030   6324
+## 19  61868  63175  64618  70064  74745  72027  71836  71196  68439  72799
+## 20     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 21     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 22   9186   9640   9667  10129  11338  12192  12193  11569  11722  12417
+## 23     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+## 24   4209   4344   4313   3674   2877   2717   2486   1860   2546   3071
+## 25  13395  13984  13980  13803  14215  14909  14679  13429  14268  15488
+## 26   5576   5236   4611   4234   4833   4764   4228   1853   2572    972
+## 27   1131   1137   1057   1057   1059   1119   1122   1127   1093   1098
+## 28    301    307    310    322    425    437    417    257     NA     NA
+## 29    790    783    902   1107   1122   1085   1331   1340   1298   1993
+## 30   2683   2494   1915   1650   1375    343     NA     NA     NA     NA
+## 31 392593 388689 379883 372430 388152 388252 393485 404251 424167 459234
+##     X1989  X1988  X1987  X1986  X1985
+## 1      NA     NA     NA     NA     NA
+## 2  114874 122180 127088 126217 128207
+## 3   37401  39514  38944  42052  48793
+## 4   27025  18837   8976   7347     NA
+## 5      NA     NA     NA     NA     NA
+## 6  113506 119264 109151 101901  94970
+## 7      NA     NA     NA     NA     NA
+## 8      NA     NA     NA     NA     NA
+## 9      NA     NA     NA     NA     NA
+## 10  65665  66872  75308  66475  63986
+## 11 358471 366667 359467 343992 335956
+## 12     NA     NA     NA     NA     NA
+## 13   4570   4541   3855   3288   2519
+## 14      0      0      0      0      0
+## 15  61837  65708  65927  62963  61193
+## 16     93     63     NA     NA     NA
+## 17     NA     NA     NA     NA     NA
+## 18   6267   6359   7449  10852  13117
+## 19  72767  76671  77231  77103  76829
+## 20     NA     NA     NA     NA     NA
+## 21     NA     NA     NA     NA     NA
+## 22  12261  13194  12581  12074  10884
+## 23     NA     NA     NA     NA     NA
+## 24   2916   3175   3526   3844   4768
+## 25  15177  16369  16107  15918  15652
+## 26   1312    641    612    649    630
+## 27   1139   1252   1593   1506   1272
+## 28     NA     NA     NA     NA     NA
+## 29   1860   1875   1874   1844   1821
+## 30     NA     NA     NA     NA     NA
+## 31 450726 463475 456884 441012 432160</code></pre>
+<pre class="r"><code>#notice any errors? :)</code></pre>
+<p><b> Practical skill outcomes of R stats useful for competency test</b></p>
+<p>Check and address missing values.<br />
+Grab part of a dataset.<br />
+Use pipes to move/wrangle chunks of your dataset.</p>
 </div>
 
 

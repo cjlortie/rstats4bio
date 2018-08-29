@@ -4,4 +4,136 @@ output: html_document
 ---
 <br>
 
-###Workflows & data models
+###Workflows & data models  
+![](./beemo.rodeo.png)
+worflows
+reproduce. 
+openly.
+
+data wrangling
+more than half the battle.
+
+
+[Data wrangling slide deck](http://www.slideshare.net/cjlortie/data-wrangling-in-r-be-a-wrangler)
+
+<b> Philosophy of R stats </b>  
+
+Tidy data make your life easier. Data strutures should match intuition and common sense. Data should have logical structure.  Rows are are observations, columns are variables. Tidy data also increase the viability that others can use your data, do better science, reuse science, and help you and your ideas survive and thrive. A workflow should also include the wrangling you did to get your data ready. If data are already very clean in a spreadsheet, they can easily become a literate, logical dataframe. Nonetheless, you should still use annotation within the introductory code to explain the meta-data of your data to some extent and what you did pre-R to get it tidy.  The philosophy here is very similar to the data viz lesson forthcoming with two dominant paradigms. Base R code functions, and pipes %>% and the logic embodied within the libraries associated with the the tidyverse. Generally, I prefer the tidyverse because it is more logical and much easier to remember.  It also has some specific functions needed to address common errors in modern data structures with little code needed to fix them up.
+
+<b>Worflow if in base R</b>  
+template for r-script
+meta-data ####
+author: cjlortie
+date: 2016
+purpose: 
+
+set-up ####
+rm(list=ls())
+getwd()
+setwd("~/r")
+
+read & check data ####
+data <-read.csv(“filename.csv”)
+names()
+dim()
+str()
+summary(data)
+
+visualize ####
+
+check assumptions ####
+
+model data and test hypothesis ####
+
+<b>Data wrangling</b>
+
+<b>Base R</b>
+key concepts:
+aggregate
+tapply
+sapply 
+lappy
+subsetting
+as.factor
+is.numeric
+na
+
+<b>tidyverse</b>
+key concepts:
+pipes are you best friend!
+%>% 
+
+dplyr
+filter for rows
+select for columns
+mutate for new variables
+summarise for bringing together many values
+
+[Excellent list of wrangling tools](http://www.computerworld.com/article/2921176/business-intelligence/great-r-packages-for-data-import-wrangling-visualization.html)
+
+
+[Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
+
+[tidyr](https://cran.r-project.org/web/packages/tidyr/README.html)
+
+[Great wrangling webinar](https://www.rstudio.com/resources/webinars/data-wrangling-with-r-and-rstudio/)
+
+We will cover two basic challenges you will certainly encounter.  
+
+<b>Missing data </b>
+```{r, missing data, warning=FALSE, message=FALSE}
+#Missing data. In error, missing cells/observations in some measure can kick back an error. In other apps, sometimes ignored but can introduce error.
+ttc <-read.csv("data/ttc.csv")
+str(ttc)
+
+#check for missing values
+is.na(ttc)
+summary(ttc, na.rm=TRUE) #excludes NA
+new.ttc <-na.omit(ttc) # returns without missing values
+is.na(new.ttc) #check to see if it worked
+
+#many other solutions but I use these two frequently
+
+```
+
+<b>Selecting part of a dataset </b>
+```{r, selections, warning=FALSE, message=FALSE}
+library(tidyverse)
+survey<-read_csv("data/5081.survey.1.csv")
+str(survey)
+
+#I want just a simple dataframe with experience by discipline
+
+experience <- survey %>% select(discipline, r.experience)
+experience
+
+#Now I just want to select the physiology folks
+physiologists <- experience %>% filter(discipline == "physiology")
+physiologists
+
+#Selections also often include a summary by levels or I want to make a new column with some calculations. Think about what you have likely done in excel.
+
+#used pipes and made a nice summary table
+experience <-survey %>% group_by(discipline) %>% summarise(
+  count = n(),
+  exp = mean (r.experience)
+)
+
+#What if I just want to make a new column to my dataframe that is a sum, a calculation, or some addition
+ttc.5.years <- ttc %>% mutate(five.year.sum = X2015+X2014+X2013+X2012+X2011)
+str(ttc.5.years)
+str(ttc)
+
+#so we made a new column.
+#can do this to original dataframe too without making new object
+ttc %>% mutate(five.year.sum = X2015+X2014+X2013+X2012+X2011)
+ttc
+#notice any errors? :)
+
+```
+
+<b> Practical skill outcomes of R stats useful for competency test</b>  
+
+Check and address missing values.  
+Grab part of a dataset.  
+Use pipes to move/wrangle chunks of your dataset.  
