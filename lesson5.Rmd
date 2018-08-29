@@ -38,7 +38,9 @@ Visualize the data to identify patterns and relationships.
 Produce a publication quality graphic.
 Do EDA on data very broadly.
 Do a single statistical address to capture main effect observed.
-Annotate
+Annotate  
+
+[Data](https://github.com/cjlortie/rstats4bio/blob/master/data/halloween/canada/canadian.candy.sales.csv)
 
 **Marking key**  
 Effective data viz/10  
