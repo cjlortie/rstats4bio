@@ -15,7 +15,8 @@ data literacy IS data science.
 
 [The importance of data viz](http://datascienceplus.com/the-importance-of-data-visualization/)
 
-<b> Philosophy of R stats </b>
+<b> Philosophy of R stats </b>  
+
 Statistical thinking: likelihood, error, and effect sizes. Contemporary statisticians embrace and are mindful of these three key concepts in all research, data, and statistical inference examinations.
 
 Modes of inference with your data: using data, what can you infer or do?
@@ -30,7 +31,7 @@ Modes of inference with your data: using data, what can you infer or do?
 This set of ideas provide the foundation for many data science and statistical approached to working with evidence within almost every domain of science.
 
 <b>Data viz first and foremost. Case study #1.</b>
-```{r, data viz exercise}
+```{r, data viz exercise, warning=FALSE, message=FALSE}
 #blog post by Fisseha Berhane
 library(ggplot2)
 library(dplyr)
@@ -78,11 +79,12 @@ ggplot(all_data, aes(x=x,y=y)) +geom_point(shape = 21, colour = "red", fill = "o
     facet_wrap(~group, scales="free")
 
 ```
+
 Outcome from stats first, data viz later (tricked), descriptive estimates of data can be deceptive. Draw first, then interpret.
 
 
 <b>Survey data from class. Case study #2.</b>
-```{r, survey}
+```{r, survey, warning=FALSE, message=FALSE}
 #load class survey responses from google poll completed in class
 survey<-read.csv("data/5081.survey.1.csv")
 str(survey) #check data match what we collected
@@ -94,10 +96,11 @@ plot(survey$r.studio, ylab="R Studio")
 plot(survey$research.data, ylab="Research data")
 #observe patterns by checking plots
 ```
+
 <b>Observations from data viz</b>
 We have limited experience in R. Experience in R varies by research discipline. A total of half the respondents have tried R Studio. Most participants will be working with quantitative data in their own research projects.
 
-```{r, test survey data with EDA}
+```{r, test survey data with EDA, warning=FALSE, message=FALSE}
 #Now, try some simple summary statistics.
 summary(survey)
 #Data summary looks reasonable based on plots, mean R experience is < 2
@@ -109,5 +112,21 @@ m1<-glm(r.experience~discipline, family = poisson, data = survey) #test for diff
 m1 #model summary
 anova(m1, test="Chisq") #test whether the differences in model are different
 #Too little evidence to be significantly different between disciplines.
+
+```
+
+
+**Case study #3.**  
+```{r, text, warning=FALSE, message=FALSE}
+#install.packages("SMPracticals")
+library(SMPracticals)
+library(tidyverse)
+darwin
+data("darwin")
+data <- darwin
+data <- as_tibble(data)
+data
+ggplot(darwin, aes(type, height)) +
+  geom_boxplot()
 
 ```

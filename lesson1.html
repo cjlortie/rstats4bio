@@ -228,22 +228,15 @@ want data. have data. will collect data.</p>
 <p>assumption: in this course, you are here to work with data. data literacy IS data science.</p>
 <p><a href="http://www.slideshare.net/cjlortie/whyr">WhyR introductory lecture</a></p>
 <p><a href="http://datascienceplus.com/the-importance-of-data-visualization/">The importance of data viz</a></p>
-<p><b> Philosophy of R stats </b> Statistical thinking: likelihood, error, and effect sizes. Contemporary statisticians embrace and are mindful of these three key concepts in all research, data, and statistical inference examinations.</p>
+<p><b> Philosophy of R stats </b></p>
+<p>Statistical thinking: likelihood, error, and effect sizes. Contemporary statisticians embrace and are mindful of these three key concepts in all research, data, and statistical inference examinations.</p>
 <p>Modes of inference with your data: using data, what can you infer or do? 1. Data description 2. Likelihood 3. Estimation 4. Baysian inference - weight and include what we know 5. Prediction 6. Hypothesis testing 7. Decision making -balance gains and risks</p>
 <p>This set of ideas provide the foundation for many data science and statistical approached to working with evidence within almost every domain of science.</p>
 <p><b>Data viz first and foremost. Case study #1.</b></p>
 <pre class="r"><code>#blog post by Fisseha Berhane
 library(ggplot2)
-library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>library(reshape2)
+library(dplyr)
+library(reshape2)
 
 #Create four groups: setA, setB, setC and setD.
 setA=select(anscombe, x=x1,y=y1)
@@ -278,20 +271,9 @@ models = all_data %&gt;%
       do(data.frame(var = names(coef(.$mod)),
                     coef = round(coef(.$mod),2),
                     group = .$group)) %&gt;%
-dcast(., group~var, value.var = &quot;coef&quot;)</code></pre>
-<pre><code>## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character</code></pre>
-<pre><code>## Warning in bind_rows_(x, .id): binding character and factor vector,
-## coercing into character vector
+dcast(., group~var, value.var = &quot;coef&quot;)
 
-## Warning in bind_rows_(x, .id): binding character and factor vector,
-## coercing into character vector
-
-## Warning in bind_rows_(x, .id): binding character and factor vector,
-## coercing into character vector
-
-## Warning in bind_rows_(x, .id): binding character and factor vector,
-## coercing into character vector</code></pre>
-<pre class="r"><code>summary_stats_and_linear_fit = cbind(summary_stats, data_frame(&quot;Linear regression&quot; =
+summary_stats_and_linear_fit = cbind(summary_stats, data_frame(&quot;Linear regression&quot; =
                                     paste0(&quot;y = &quot;,models$&quot;(Intercept)&quot;,&quot; + &quot;,models$x,&quot;x&quot;)))
 
 summary_stats_and_linear_fit</code></pre>
@@ -309,7 +291,8 @@ summary_stats_and_linear_fit</code></pre>
 ggplot(all_data, aes(x=x,y=y)) +geom_point(shape = 21, colour = &quot;red&quot;, fill = &quot;orange&quot;, size = 3)+
     ggtitle(&quot;Anscombe&#39;s data sets&quot;)+geom_smooth(method = &quot;lm&quot;,se = FALSE,color=&#39;blue&#39;) + 
     facet_wrap(~group, scales=&quot;free&quot;)</code></pre>
-<p><img src="lesson1_files/figure-html/data%20viz%20exercise-1.png" width="672" /> Outcome from stats first, data viz later (tricked), descriptive estimates of data can be deceptive. Draw first, then interpret.</p>
+<p><img src="lesson1_files/figure-html/data%20viz%20exercise-1.png" width="672" /></p>
+<p>Outcome from stats first, data viz later (tricked), descriptive estimates of data can be deceptive. Draw first, then interpret.</p>
 <p><b>Survey data from class. Case study #2.</b></p>
 <pre class="r"><code>#load class survey responses from google poll completed in class
 survey&lt;-read.csv(&quot;data/5081.survey.1.csv&quot;)
@@ -394,6 +377,63 @@ m1 #model summary</code></pre>
 ## NULL                          17     6.8075         
 ## discipline  3  0.43692        14     6.3706   0.9325</code></pre>
 <pre class="r"><code>#Too little evidence to be significantly different between disciplines.</code></pre>
+<p><strong>Case study #3.</strong></p>
+<pre class="r"><code>#install.packages(&quot;SMPracticals&quot;)
+library(SMPracticals)
+library(tidyverse)
+darwin</code></pre>
+<pre><code>##    pot pair  type height
+## 1    I    1 Cross 23.500
+## 2    I    1  Self 17.375
+## 3    I    2 Cross 12.000
+## 4    I    2  Self 20.375
+## 5    I    3 Cross 21.000
+## 6    I    3  Self 20.000
+## 7   II    4 Cross 22.000
+## 8   II    4  Self 20.000
+## 9   II    5 Cross 19.125
+## 10  II    5  Self 18.375
+## 11  II    6 Cross 21.500
+## 12  II    6  Self 18.625
+## 13 III    7 Cross 22.125
+## 14 III    7  Self 18.625
+## 15 III    8 Cross 20.375
+## 16 III    8  Self 15.250
+## 17 III    9 Cross 18.250
+## 18 III    9  Self 16.500
+## 19 III   10 Cross 21.625
+## 20 III   10  Self 18.000
+## 21 III   11 Cross 23.250
+## 22 III   11  Self 16.250
+## 23  IV   12 Cross 21.000
+## 24  IV   12  Self 18.000
+## 25  IV   13 Cross 22.125
+## 26  IV   13  Self 12.750
+## 27  IV   14 Cross 23.000
+## 28  IV   14  Self 15.500
+## 29  IV   15 Cross 12.000
+## 30  IV   15  Self 18.000</code></pre>
+<pre class="r"><code>data(&quot;darwin&quot;)
+data &lt;- darwin
+data &lt;- as_tibble(data)
+data</code></pre>
+<pre><code>## # A tibble: 30 x 4
+##    pot   pair  type  height
+##  * &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;  &lt;dbl&gt;
+##  1 I     1     Cross   23.5
+##  2 I     1     Self    17.4
+##  3 I     2     Cross   12  
+##  4 I     2     Self    20.4
+##  5 I     3     Cross   21  
+##  6 I     3     Self    20  
+##  7 II    4     Cross   22  
+##  8 II    4     Self    20  
+##  9 II    5     Cross   19.1
+## 10 II    5     Self    18.4
+## # ... with 20 more rows</code></pre>
+<pre class="r"><code>ggplot(darwin, aes(type, height)) +
+  geom_boxplot()</code></pre>
+<p><img src="lesson1_files/figure-html/text-1.png" width="672" /></p>
 </div>
 
 
