@@ -4,4 +4,14 @@ output: html_document
 ---
 <br>
 
-###Competency test
+###Competency test  
+A practical test will begin in class. You can work in class and get whatever advice you need from instructor. An entire additional week is provided to tidy up, annotate, and knit to pdf a final report.
+
+Dataset to solve will be provided here.  
+
+**Marking key**  
+Effective data viz/10  
+Effective exploratory data analyses/5  
+Final data model/5  
+Annotation, description, and brief interpretation/5  
+Total = 25%
