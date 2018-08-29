@@ -14,6 +14,8 @@ navbar:
       href: lesson4.html
     - text: "lesson5"
       href: lesson5.html
+    - text: "review"
+      href: review.html
     - text: "test"
       href: test.html
       
