@@ -137,3 +137,6 @@ ttc
 Check and address missing values.  
 Grab part of a dataset.  
 Use pipes to move/wrangle chunks of your dataset.  
+
+**Readings**  
+CH2 in text

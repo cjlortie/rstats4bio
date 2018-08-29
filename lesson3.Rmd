@@ -4,4 +4,207 @@ output: html_document
 ---
 <br>
 
-###Data viz
+###Data viz  
+![](./viz.png)  
+
+
+basic plots.  
+lattice.  
+ggplot2.  
+you need to see data. see the trends. explore them using visuals.  
+
+[Contemporary data viz for statistical analyses slide deck](http://www.slideshare.net/cjlortie/data-visualization-in-r-65991145)
+
+<b> Philosophy of R stats </b>  
+Clean simple graphics are powerful tools in statistics (and in scientific communication).  Tufte and others have shaped data scientists and statisticians in developing more libraries, new standards, and assumptions associated with graphical representations of data.  Data viz must highlight the differences, show underlying data structures, and provide insights into the specific research project. R is infinitely customizable in all these respects.  There are at least two major current paradigms (there are more these are the two dominant idea sets).  Base R plots are simple, relatively flexible, and very easy. However, their grammar, i.e their rules of coding are not modern. Ggplot and related libraries invoke a new, formal grammar of graphics that is more logical, more flexible, but divergent from base R code. It is worth the time to understand the differences and know when to use each.
+
+Evolution of plotting in statistics using R in particular went from base-R then onto lattice then to the ggvis universe with the most recent library being ggplot2. Base-R is certainly useful in some contexts as is the lattice and lattice extra library. However, ggplot2 now encompasses all these capacities with a much simpler set of grammar (i.e. rules and order). Nonetheless, you should be able to read base-R code for plots and be able to do some as well. The philosophy or grammar of modern graphics is well articulated and includes the following key principles.
+
+The grammar of graphics
+layers
+primacy of layers (simple first, then more complex) i.e. you build up your plots
+data are mapped to aesthetic attributes and geometric objects
+data first then statistics even in plots
+
+
+[ggplot2 cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf)
+
+<b>Data viz case study #1.</b>
+```{r, survey data viz, warning=FALSE, message=FALSE}
+library(ggplot2)
+survey<-read.csv("data/5081.survey.1.csv")
+str(survey)
+
+plot(survey$r.experience) #hard to tell what is going on
+
+qplot(r.experience, data=survey) #decided to make bins for me and count up)
+
+#so, we know better and instead do a histogram using base graphics
+#basic data viz for EDA
+hist(survey$r.experience) #better
+qplot(r.experience, data=survey, geom="histogram") #same as what is picked for us
+qplot(r.experience, data=survey, geom="histogram", binwidth=0.5)
+
+barplot(survey$r.experience) #confusing
+qplot(r.experience, data=survey, geom="bar") #what, it is back!
+
+#basic data viz for EDA but for interactions
+plot(survey$discipline, survey$r.experience)
+qplot(discipline, r.experience, data=survey) #not the same
+qplot(discipline, r.experience, data=survey, geom="boxplot")
+
+plot(survey$r.studio~survey$r.experience) #ugly
+qplot(r.experience, r.studio, data=survey) #useless
+qplot(r.studio, data=survey, weight = r.experience) #sweet new feature here
+
+#ok, so you get it. grammar different, visuals about the same for super quick, simple plots. The grammar hints at the power that awaits though.
+
+#grammar different, simple x or x~y plots about the same
+
+```
+
+<b>Data viz case study #2.</b>
+```{r, diamonds are our best friend, warning=FALSE, message=FALSE}
+str(diamonds)
+#crazy number of observations. We need less. too many riches not always good.
+set.seed(1000)
+dsmall<-diamonds[sample(nrow(diamonds), 100), ]
+
+plot(dsmall$carat, dsmall$price)
+qplot(carat, price, data=dsmall)
+
+#ok no difference
+#now let's see what we can do with qplot with a few bits added
+#one little argument extra added
+qplot(carat, price, data = dsmall, colour = color)
+qplot(carat, price, data = dsmall, shape = cut)
+
+#how about using data viz to even more thoroughly explore potential stats we could do.
+#qplots - quick plot, thoughful build of layers
+qplot(carat, price, data = dsmall, geom = c("point", "smooth"))
+
+#what about trying some stats on this now, at least from a viz philosophy
+qplot(color, price / carat, data = dsmall, geom = "boxplot") #can include formulas and methods
+
+#or check for proportional differences
+qplot(carat, data = dsmall, geom = "histogram", fill = color) #to see proportions
+qplot(carat, data = dsmall, geom = "histogram", weight = price) # weight by a covariate
+     
+#final idea, how about subsetting with the data right in the code for the plots!
+qplot(carat, data = diamonds, facets = color ~ .,
+  geom = "histogram", binwidth = 0.1, xlim = c(0, 3)) #to compare between groups
+
+#qplot is so powerful.
+#colour, shape and size have meaning in the R code from this library
+#layers added for you by qplots
+
+#qplot gets you 2x and one y or one x and 2y so >2 variables at once easily
+```
+
+<b>Data viz case study #3.</b>
+```{r, ggplot, warning=FALSE, message=FALSE}
+#GGPLOT() gives you even more options for adding layers/options
+p <- ggplot(mtcars, aes(x = mpg, y = wt))
+p + geom_point()
+
+#now play time with this case study.
+#try out some geom options and different aesthetics and make some errors.
+#prize for the prettiest plots
+
+#displ is car engine size in Liters
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = class))
+
+#so aethetics are one way to add variables in and expand your plotting power
+#however facets are another way to make multiple plots BY a factor
+
+#facet wrap is by one variable
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap(~ class, nrow = 2)
+
+#facet_wrap(~cell) - univariate: create a 1-d strip of panels, based on one factor, and wrap the strip into a 2-d matrix
+#facet_grid(row~col) - (usually) bivariate: create a 2-d matrix of panels, based on two factors
+
+#facet grid is by two variables
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_grid(drv ~ cyl)
+
+#another example more perfect code
+p <- ggplot(data = mpg, aes(x = displ, y = hwy, color = drv)) + geom_point()
+p + facet_wrap(~cyl)
+
+#or just use facets in qplot but much simpler
+qplot(displ, hwy, data=mpg, facets = . ~ year) + geom_smooth()
+
+```
+
+<b>Data viz case study #4.</b>
+```{r, worked example, warning=FALSE, message=FALSE}
+#try it with ecological.footprints.csv
+footprints <-read.csv("data/ecological.footprints.csv")
+str(footprints)
+#aha, R thinks year is an integet
+footprints$yr <- as.factor(footprints$yr)
+library(ggplot2)
+qplot(country, ecological.footprint, data = footprints) #too messy
+
+qplot(country, ecological.footprint, data = footprints, colour = yr) #better but still a lot to process
+
+qplot(country, ecological.footprint, data = footprints, facets = yr~.) #ok but do not love. hard to see distribution
+
+qplot(ecological.footprint, data = footprints) #you know what, this is not bad.  maybe add year in too/
+
+qplot(ecological.footprint, data = footprints, fill = yr) #ok now I starting to see structure and differences
+
+#OK, now I am ready for stats. Thinking about these data, I see we have only two years for some countries so cannot do within country or between country contrasts. So, most likely hypothesis I can test is whether ecological footprints are increasing between these two years. Not a perfect dataset really but could compare these two years.
+
+t.test(footprints$ecological.footprint~ footprints$yr)
+#ok looks like there are differences between years but it is hard to tell from previous plot. Realize now, I need a better plot still?
+
+qplot(yr, ecological.footprint, data = footprints, geom="boxplot") #this is weird, 2000 looks higher
+
+#different countries between years?
+#more countries reported in 2000?
+library(dplyr)
+footprints %>% count(yr)
+#Yup, way more data for year 2000
+#maybe should just the countries that were testedin both years?
+
+library(tidyr)
+matches <- spread(footprints, yr, ecological.footprint) %>% filter() %>% na.omit
+str(matches)
+matches
+
+#whoa, USA and Canada missing, and we have HUGE footprints.
+
+#got it. just the countries with measure in BOTH years.
+#now, gather up again with these filtered matches!
+
+new <- matches %>% gather(`2000`, `2012`, key = "yr", value ="ecological.footprint")
+new #ok so now a nice dataframe with just matches back in a format I can use for plots and stats
+
+qplot(yr, ecological.footprint, data = footprints, geom="boxplot")
+
+t.test(new$ecological.footprint~ new$yr, paired=TRUE)
+#Well, I give up, seems like the footprints for the world went down not up in this time period. GOOD NEWS for the environmental movement in some respects.
+new %>% group_by(yr) %>% summarise(mean(ecological.footprint))
+
+# We still use 2.4 planets worth of resources but only have one.
+
+#AND, we are missing some key countries that contribute to global change including Canada and USA.
+
+```
+
+<b> Practical skill outcomes of R stats useful for competency test</b>  
+Do meaningful plot of a single variable wth nice labels.  
+Do a meaningful plot of a relationship between two variables.  
+Use qplots to do a plot that includes an aesthetic.  
+Do a ggplot that includes three variables.  
+
+**Readings**  
+[Physics example in Wired Mag why to plot data even if you have a model](https://www.wired.com/2016/09/might-gotten-little-carried-away-physics-time/)
+
+CH3 in text on t-tests but think about how even simple data viz in that chapter is so important to be able to 'see' the differences.
+ 

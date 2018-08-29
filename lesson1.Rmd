@@ -139,3 +139,6 @@ Be prepared to share code.
 Load data, clean data, visualize data, then and only then begin applying statistics.  
 
 Proximately: be able to use and work with dataframes, vectors, functions, tibbles, and libraries in R.
+
+**Readings**  
+Ch1 and appendix in text.
