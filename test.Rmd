@@ -5,9 +5,28 @@ output: html_document
 <br>
 
 ###Competency test  
+![](./test.jpg)  
+
+
+[General best practices on scientific computing](https://swcarpentry.github.io/good-enough-practices-in-scientific-computing/)  
+
+[Cheatsheets!](https://www.rstudio.com/resources/cheatsheets/)  
+
+I recommend printing them up.  
+Also, scroll down on page, the regex one is great. Lists the gsub function.  
+
+deliberate practice.  
+tested with feedback.  
+a virtual repeat of last week with new data but evaluated.  
+Pizza provided this week.  
+
+<b>Prep suggestions</b>  
+1. Learn how to use inner_join  
+2. Practice using the 'file/knit document' within RStudio. [I am happy to review and accept only the R code but as as backup a knit of the output including code as PDF is good. Also, knitted docs/pdfs/html pages are super for sharing your analyses with your graduate researcher collaborators or mentors]. This entire 6-week course was done in RStudio and RMarkdown.  
+
 A practical test will begin in class. You can work in class and get whatever advice you need from instructor. An entire additional week is provided to tidy up, annotate, and knit to pdf a final report.
 
-Dataset to solve will be provided here.  
+**Dataset to solve will be provided here.**    
 
 **Marking key**  
 Effective data viz/10  
