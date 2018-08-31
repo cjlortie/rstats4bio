@@ -24,8 +24,7 @@ The first six weeks of the course, i.e. **Module 1**, will cover data science & 
 [The new statistics for R paperbook](https://global.oup.com/academic/product/the-new-statistics-with-r-9780198729068?cc=us&lang=en&) available in bookstore and online.  
 
 
-**Schedule for module 1**
-
+**Schedule for module 1**  
 Sept 6. Lesson 1.   
 Sept 13. Lesson 2.   
 Sept 20. Lesson 3.  
@@ -33,9 +32,24 @@ Sept 27. Lesson 4 & review due to Dr. Lortie by midnight.
 Oct 4. Lesson 5.  
 Oct 18. Test begins in class but is take-home and due Oct 25th by noon.  
 
+**Learning outcomes**  
+1.	Build a data model for a graduate-level dataset.  
+2.	Develop a reproducible data and statistical workflow.  
+3.	Design and complete intermediate-level data visualizations appropriate for a graduate-level simple dataset.  
+4.	Complete fundamental exploratory data analysis on any dataset.  
+5.	Appreciate the strengths and limitations of open science, data science, and evidence-based collaboration models.  
+
 **Evaluation for module 1**  
 Review 25%   
 Take-home statistical test/report 25%  
+
+Both assignments must be submitted to turnitin.com  
+Class ID: 18910126  
+Key: rstats4bio  
+
+
+
+
 
 
 
