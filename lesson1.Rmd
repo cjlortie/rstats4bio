@@ -131,6 +131,29 @@ ggplot(darwin, aes(type, height)) +
 
 ```
 
+**Case study #4.**  
+```{r, 2018.data, warning=FALSE, message=FALSE}
+library(tidyverse)
+data <- read_csv("data/5081.survey.2.csv")
+data
+data <- na.exclude(data)
+data
+
+#crimping code from last time to compare the same way
+hist(data$r.experience, xlab="experience in R (1 is none, 5 is extensive)", ylab="frequency", main="Likert Scale 1 to 5")
+
+ggplot(data, aes(discipline, r.experience)) +
+  geom_boxplot()
+
+ggplot(data, aes(r.studio)) +
+  geom_bar()
+
+ggplot(data, aes(research.data)) +
+  geom_bar()
+
+```
+
+
 <b> Practical skill outcomes of R stats useful for competency test</b>  
 
 Understand the difference between R and R Studio.  

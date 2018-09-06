@@ -434,6 +434,60 @@ data</code></pre>
 <pre class="r"><code>ggplot(darwin, aes(type, height)) +
   geom_boxplot()</code></pre>
 <p><img src="lesson1_files/figure-html/text-1.png" width="672" /></p>
+<p><strong>Case study #4.</strong></p>
+<pre class="r"><code>library(tidyverse)
+data &lt;- read_csv(&quot;data/5081.survey.2.csv&quot;)
+data</code></pre>
+<pre><code>## # A tibble: 21 x 4
+##    r.experience discipline            research.data r.studio
+##           &lt;int&gt; &lt;chr&gt;                 &lt;chr&gt;         &lt;chr&gt;   
+##  1            1 physiology            quantitative  No      
+##  2            1 physiology            quantitative  Yes     
+##  3           NA ecology               quantitative  Yes     
+##  4            2 ecology               quantitative  No      
+##  5            2 ecology               quantitative  No      
+##  6            2 physiology            qualitative   No      
+##  7            1 genetics              quantitative  No      
+##  8            1 environmental science quantitative  No      
+##  9            2 genetics              qualitative   Yes     
+## 10            2 ecology               quantitative  Yes     
+## # ... with 11 more rows</code></pre>
+<pre class="r"><code>data &lt;- na.exclude(data)
+data</code></pre>
+<pre><code>## # A tibble: 19 x 4
+##    r.experience discipline            research.data r.studio
+##           &lt;int&gt; &lt;chr&gt;                 &lt;chr&gt;         &lt;chr&gt;   
+##  1            1 physiology            quantitative  No      
+##  2            1 physiology            quantitative  Yes     
+##  3            2 ecology               quantitative  No      
+##  4            2 ecology               quantitative  No      
+##  5            2 physiology            qualitative   No      
+##  6            1 genetics              quantitative  No      
+##  7            1 environmental science quantitative  No      
+##  8            2 genetics              qualitative   Yes     
+##  9            2 ecology               quantitative  Yes     
+## 10            1 physiology            quantitative  No      
+## 11            3 ecology               quantitative  Yes     
+## 12            4 ecology               quantitative  Yes     
+## 13            3 ecology               quantitative  Yes     
+## 14            2 ecology               quantitative  Yes     
+## 15            2 genetics              quantitative  Yes     
+## 16            2 ecology               quantitative  Yes     
+## 17            1 environmental science quantitative  No      
+## 18            1 environmental science quantitative  No      
+## 19            2 ecology               qualitative   No</code></pre>
+<pre class="r"><code>#crimping code from last time to compare the same way
+hist(data$r.experience, xlab=&quot;experience in R (1 is none, 5 is extensive)&quot;, ylab=&quot;frequency&quot;, main=&quot;Likert Scale 1 to 5&quot;)</code></pre>
+<p><img src="lesson1_files/figure-html/2018.data-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(data, aes(discipline, r.experience)) +
+  geom_boxplot()</code></pre>
+<p><img src="lesson1_files/figure-html/2018.data-2.png" width="672" /></p>
+<pre class="r"><code>ggplot(data, aes(r.studio)) +
+  geom_bar()</code></pre>
+<p><img src="lesson1_files/figure-html/2018.data-3.png" width="672" /></p>
+<pre class="r"><code>ggplot(data, aes(research.data)) +
+  geom_bar()</code></pre>
+<p><img src="lesson1_files/figure-html/2018.data-4.png" width="672" /></p>
 <p><b> Practical skill outcomes of R stats useful for competency test</b></p>
 <p>Understand the difference between R and R Studio.<br />
 Use scripts or R Markdown files to save all your work.<br />
