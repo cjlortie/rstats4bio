@@ -153,11 +153,10 @@ ggplot(data, aes(as.character(r.experience))) +
 ggplot(data, aes(discipline, r.experience)) +
   geom_boxplot() + labs(y= "reported experience in r")
   
-ggplot(data, aes(r.studio)) +
-  geom_bar()
-
-ggplot(data, aes(research.data)) +
-  geom_bar()
+ggplot(data, aes(r.studio, fill =research.data)) +
+  geom_bar() + 
+  scale_y_continuous(breaks = seq(0,10, 2)) + 
+  scale_fill_brewer()
 
 ```
 
