@@ -476,18 +476,25 @@ data</code></pre>
 ## 17            1 environmental science quantitative  No      
 ## 18            1 environmental science quantitative  No      
 ## 19            2 ecology               qualitative   No</code></pre>
-<pre class="r"><code>#crimping code from last time to compare the same way
-hist(data$r.experience, xlab=&quot;experience in R (1 is none, 5 is extensive)&quot;, ylab=&quot;frequency&quot;, main=&quot;Likert Scale 1 to 5&quot;)</code></pre>
+<pre class="r"><code>ggplot(data, aes(as.character(r.experience))) +
+  geom_histogram(stat = &quot;count&quot;) +
+  labs(x= &quot;reported experience in r&quot;, y = &quot;frequency&quot;) +
+ scale_y_continuous(breaks = seq(0, 8, by = 2))#r.experience needs to be a character so that ggplot can count up frequency at the each level </code></pre>
 <p><img src="lesson1_files/figure-html/2018.data-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(data, aes(discipline, r.experience)) +
-  geom_boxplot()</code></pre>
+<pre class="r"><code>ggplot(data, aes(as.character(r.experience))) +
+  geom_histogram(stat = &quot;count&quot;) +
+  labs(x= &quot;reported experience in r&quot;, y = &quot;frequency&quot;) +
+ facet_wrap(~discipline)#r.experience needs to be a character so that ggplot can count up frequency at the each level </code></pre>
 <p><img src="lesson1_files/figure-html/2018.data-2.png" width="672" /></p>
+<pre class="r"><code>ggplot(data, aes(discipline, r.experience)) +
+  geom_boxplot() + labs(y= &quot;reported experience in r&quot;)</code></pre>
+<p><img src="lesson1_files/figure-html/2018.data-3.png" width="672" /></p>
 <pre class="r"><code>ggplot(data, aes(r.studio)) +
   geom_bar()</code></pre>
-<p><img src="lesson1_files/figure-html/2018.data-3.png" width="672" /></p>
+<p><img src="lesson1_files/figure-html/2018.data-4.png" width="672" /></p>
 <pre class="r"><code>ggplot(data, aes(research.data)) +
   geom_bar()</code></pre>
-<p><img src="lesson1_files/figure-html/2018.data-4.png" width="672" /></p>
+<p><img src="lesson1_files/figure-html/2018.data-5.png" width="672" /></p>
 <p><b> Practical skill outcomes of R stats useful for competency test</b></p>
 <p>Understand the difference between R and R Studio.<br />
 Use scripts or R Markdown files to save all your work.<br />

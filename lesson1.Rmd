@@ -139,12 +139,20 @@ data
 data <- na.exclude(data)
 data
 
-#crimping code from last time to compare the same way
-hist(data$r.experience, xlab="experience in R (1 is none, 5 is extensive)", ylab="frequency", main="Likert Scale 1 to 5")
+ggplot(data, aes(as.character(r.experience))) +
+  geom_histogram(stat = "count") +
+  labs(x= "reported experience in r", y = "frequency") +
+ scale_y_continuous(breaks = seq(0, 8, by = 2))#r.experience needs to be a character so that ggplot can count up frequency at the each level 
+
+ggplot(data, aes(as.character(r.experience))) +
+  geom_histogram(stat = "count") +
+  labs(x= "reported experience in r", y = "frequency") +
+ facet_wrap(~discipline)#r.experience needs to be a character so that ggplot can count up frequency at the each level 
+
 
 ggplot(data, aes(discipline, r.experience)) +
-  geom_boxplot()
-
+  geom_boxplot() + labs(y= "reported experience in r")
+  
 ggplot(data, aes(r.studio)) +
   geom_bar()
 
