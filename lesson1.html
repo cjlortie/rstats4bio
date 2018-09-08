@@ -484,7 +484,8 @@ data</code></pre>
 <pre class="r"><code>ggplot(data, aes(as.character(r.experience))) +
   geom_histogram(stat = &quot;count&quot;) +
   labs(x= &quot;reported experience in r&quot;, y = &quot;frequency&quot;) +
- facet_wrap(~discipline)#r.experience needs to be a character so that ggplot can count up frequency at the each level </code></pre>
+ facet_wrap(~discipline) + 
+  scale_x_discrete(limits = c(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;))</code></pre>
 <p><img src="lesson1_files/figure-html/2018.data-2.png" width="672" /></p>
 <pre class="r"><code>ggplot(data, aes(discipline, r.experience)) +
   geom_boxplot() + labs(y= &quot;reported experience in r&quot;)</code></pre>

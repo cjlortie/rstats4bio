@@ -147,8 +147,8 @@ ggplot(data, aes(as.character(r.experience))) +
 ggplot(data, aes(as.character(r.experience))) +
   geom_histogram(stat = "count") +
   labs(x= "reported experience in r", y = "frequency") +
- facet_wrap(~discipline)#r.experience needs to be a character so that ggplot can count up frequency at the each level 
-
+ facet_wrap(~discipline) + 
+  scale_x_discrete(limits = c("1", "2", "3", "4", "5"))
 
 ggplot(data, aes(discipline, r.experience)) +
   geom_boxplot() + labs(y= "reported experience in r")
