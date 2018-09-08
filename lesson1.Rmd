@@ -160,6 +160,22 @@ ggplot(data, aes(r.studio, fill =research.data)) +
 
 ```
 
+```{r, eda, 2018 survey, warning=FALSE, message=FALSE}
+summary(data)
+
+t.test(data$r.experience, mu=1) #t-test if mean is different from 1
+
+t.test(data$r.experience, mu=2) #t-test if mean is different from 2
+
+#ok cool - so 1 is the winner.
+
+#not test between disciplines
+m1<-glm(r.experience~discipline, family = poisson, data = data) #test for differenes between disciplines in R experience
+m1 #model summary
+anova(m1, test="Chisq") #test whether the differences in model are different from one another and not intercept in model
+#Too little evidence to be significantly different between disciplines.
+
+```
 
 <b> Practical skill outcomes of R stats useful for competency test</b>  
 

@@ -494,6 +494,69 @@ data</code></pre>
   scale_y_continuous(breaks = seq(0,10, 2)) + 
   scale_fill_brewer()</code></pre>
 <p><img src="lesson1_files/figure-html/2018.data-4.png" width="672" /></p>
+<pre class="r"><code>summary(data)</code></pre>
+<pre><code>##   r.experience    discipline        research.data        r.studio        
+##  Min.   :1.000   Length:19          Length:19          Length:19         
+##  1st Qu.:1.000   Class :character   Class :character   Class :character  
+##  Median :2.000   Mode  :character   Mode  :character   Mode  :character  
+##  Mean   :1.842                                                           
+##  3rd Qu.:2.000                                                           
+##  Max.   :4.000</code></pre>
+<pre class="r"><code>t.test(data$r.experience, mu=1) #t-test if mean is different from 1</code></pre>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  data$r.experience
+## t = 4.4002, df = 18, p-value = 0.0003453
+## alternative hypothesis: true mean is not equal to 1
+## 95 percent confidence interval:
+##  1.440029 2.244182
+## sample estimates:
+## mean of x 
+##  1.842105</code></pre>
+<pre class="r"><code>t.test(data$r.experience, mu=2) #t-test if mean is different from 2</code></pre>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  data$r.experience
+## t = -0.82503, df = 18, p-value = 0.4202
+## alternative hypothesis: true mean is not equal to 2
+## 95 percent confidence interval:
+##  1.440029 2.244182
+## sample estimates:
+## mean of x 
+##  1.842105</code></pre>
+<pre class="r"><code>#ok cool - so 1 is the winner.
+
+#not test between disciplines
+m1&lt;-glm(r.experience~discipline, family = poisson, data = data) #test for differenes between disciplines in R experience
+m1 #model summary</code></pre>
+<pre><code>## 
+## Call:  glm(formula = r.experience ~ discipline, family = poisson, data = data)
+## 
+## Coefficients:
+##                     (Intercept)  disciplineenvironmental science  
+##                          0.8938                          -0.8938  
+##              disciplinegenetics             disciplinephysiology  
+##                         -0.3830                          -0.6707  
+## 
+## Degrees of Freedom: 18 Total (i.e. Null);  15 Residual
+## Null Deviance:       6.463 
+## Residual Deviance: 2.559     AIC: 57.33</code></pre>
+<pre class="r"><code>anova(m1, test=&quot;Chisq&quot;) #test whether the differences in model are different from one another and not intercept in model</code></pre>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model: poisson, link: log
+## 
+## Response: r.experience
+## 
+## Terms added sequentially (first to last)
+## 
+## 
+##            Df Deviance Resid. Df Resid. Dev Pr(&gt;Chi)
+## NULL                          18     6.4634         
+## discipline  3    3.904        15     2.5593    0.272</code></pre>
+<pre class="r"><code>#Too little evidence to be significantly different between disciplines.</code></pre>
 <p><b> Practical skill outcomes of R stats useful for competency test</b></p>
 <p>Understand the difference between R and R Studio.<br />
 Use scripts or R Markdown files to save all your work.<br />
