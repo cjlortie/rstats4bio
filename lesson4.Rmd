@@ -15,7 +15,7 @@ modelR
 [slide deck for EDA](http://www.slideshare.net/cjlortie/exploratory-data-analysis-and-models-in-r)  
 
 <b> Philosophy of R stats </b>    
-Exploratory data analyses is everything we have done.
+Exploratory data analyses is everything we have done.  
 a. Tidy data.  
 b. Inspect data structure.  
 c. Data viz.  
