@@ -40,11 +40,21 @@ Do EDA on data very broadly.
 Do a single statistical address to capture main effect observed.
 Annotate  
 
-[Data](https://github.com/cjlortie/rstats4bio/blob/master/data/halloween/canada/canadian.candy.sales.csv)
+**Challenge**  
+Compare Canada and USA candy sales at Halloween including population density of each country each in year in your analyses.  
 
-**Marking key**  
-Effective data viz/10  
-Effective exploratory data analyses/5  
-Final data model/5  
-Annotation, description, and brief interpretation/5  
-Total = 25%
+[Canadian Candy Data](https://github.com/cjlortie/rstats4bio/blob/master/data/halloween/canada/canadian.candy.sales.csv)  
+
+[USA Halloween spending](https://github.com/cjlortie/rstats4bio/blob/master/data/halloween/usa/usa.halloween.spending.csv)  
+
+[World population data](https://github.com/cjlortie/rstats4bio/blob/master/data/halloween/general%20data/human.pop.density.csv)  
+
+**Marking key**    
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library(tidyverse)
+library(knitr)
+hackathon <- read_csv("key_hackathon.csv")
+knitr::kable(hackathon)
+
+```
+
