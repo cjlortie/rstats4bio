@@ -14,6 +14,13 @@ Here are ten simple rules to guide you.
 If you strongly prefer, you are welcome to select and read a total of three peer-reviewed 'how to' do biostats papers and review them instead. The same marking key will be used.
 
 **Marking key**  
-Each rule covered in some capacity/2  
-Writing style and coherence/5  
-Total = 25%
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library(tidyverse)
+library(knitr)
+review <- read_csv("key_review.csv")
+knitr::kable(review)
+
+```
+
+
