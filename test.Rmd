@@ -24,13 +24,24 @@ Pizza provided this week.
 1. Learn how to use inner_join  
 2. Practice using the 'file/knit document' within RStudio. [I am happy to review and accept only the R code but as as backup a knit of the output including code as PDF is good. Also, knitted docs/pdfs/html pages are super for sharing your analyses with your graduate researcher collaborators or mentors]. This entire 6-week course was done in RStudio and RMarkdown.  
 
-A practical test will begin in class. You can work in class and get whatever advice you need from instructor. An entire additional week is provided to tidy up, annotate, and knit to pdf a final report.
+A practical test will begin in class. You can work in class and get whatever advice you need from instructor. An entire additional week is provided to tidy up, annotate, and knit to pdf a final report.  
 
-**Dataset to solve will be provided here.**    
+**Challenge: patterns in global happiness**  
+1. How happy is the planet and how variable is this happiness?  
+2. Does GDP or population density predict happiness?  
+3. How does happiness change or time and if so why?  
 
-**Marking key**  
-Effective data viz/10  
-Effective exploratory data analyses/5  
-Final data model/5  
-Annotation, description, and brief interpretation/5  
-Total = 25%
+Data from online open sources such as the [Happy planet idex](http://happyplanetindex.org)  
+
+[Happy Planet Index Data]()
+
+
+**Marking key**    
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library(tidyverse)
+library(knitr)
+hackathon <- read_csv("key_hackathon.csv")
+knitr::kable(hackathon)
+
+```
+
