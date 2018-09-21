@@ -29,11 +29,13 @@ A practical test will begin in class. You can work in class and get whatever adv
 **Challenge: patterns in global happiness**  
 1. How happy is the planet and how variable is this happiness?  
 2. Does GDP or population density predict happiness?  
-3. How does happiness change or time and if so why?  
+3. How does happiness change over time and if so why?  
 
-Data from online open sources such as the [Happy planet idex](http://happyplanetindex.org)  
+[Happy Planet Index Data](https://github.com/cjlortie/rstats4bio/blob/master/data/hpi.csv)  
 
-[Happy Planet Index Data]()
+[GDP](https://github.com/cjlortie/rstats4bio/blob/master/data/global.GDP.csv)  
+
+[Human pop density](https://github.com/cjlortie/rstats4bio/blob/master/data/human.pop.density.csv)  
 
 
 **Marking key**    
