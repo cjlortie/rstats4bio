@@ -30,12 +30,15 @@ A practical test will begin in class. You can work in class and get whatever adv
 1. How happy is the planet and how variable is this happiness?  
 2. Does GDP or population density predict happiness?  
 3. How does happiness change over time and if so why?  
+4. BONUS: are the happiest, poorest people also the highest risk to suffer from climate change?  
 
 [Happy Planet Index Data](https://github.com/cjlortie/rstats4bio/blob/master/data/hpi.csv)  
 
 [GDP](https://github.com/cjlortie/rstats4bio/blob/master/data/global.GDP.csv)  
 
 [Human pop density](https://github.com/cjlortie/rstats4bio/blob/master/data/human.pop.density.csv)  
+
+[World Climate Risk Index](https://github.com/cjlortie/rstats4bio/blob/master/data/CRI/world_CRI.csv)
 
 
 **Marking key**    
