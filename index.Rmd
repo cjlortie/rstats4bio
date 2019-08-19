@@ -41,8 +41,8 @@ Oct 9:     Statistical models and prediction in the biosciences practical exerci
 5.	Appreciate the strengths and limitations of open science, data science, and evidence-based collaboration models.  
 
 **Evaluation for module 1**  
-Review 25%   
-Take-home statistical test/report 25%  
+Review 25% due (Oct 2, 2019)     
+Take-home statistical test/report 25%  (Oct 16, 2019)  
 
 Both assignments must be submitted to turnitin.com  
 Class ID: 21965331    
