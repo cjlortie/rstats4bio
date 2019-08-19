@@ -11,7 +11,7 @@
 
 
 
-<title></title>
+<title>index.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -69,9 +69,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -96,6 +94,9 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
 </style>
 
 
@@ -110,7 +111,6 @@ body {
   padding-top: 50px;
   margin-top: -50px;
 }
-
 .section h2 {
   padding-top: 50px;
   margin-top: -50px;
@@ -130,6 +130,43 @@ body {
 .section h6 {
   padding-top: 50px;
   margin-top: -50px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -151,19 +188,85 @@ $(document).ready(function () {
 });
 </script>
 
-
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
 });
 </script>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -221,24 +324,23 @@ $(document).ready(function () {
 
 
 <p><br></p>
-<div id="biostatistics-in-r" class="section level3">
-<h3>Biostatistics in R</h3>
-<p><img src="stats.jpg" /><br />
+<p>###Biostatistics in R<br />
+<img src="stats.jpg" /><br />
 <br> <strong>rstats4bio</strong> adventure_time</p>
 <p>Please tweet all discoveries because we will scrape these data at the end of term for test.</p>
-<p>Direct tweets to <strong><span class="citation">@cjlortie#rstats</span> #rstats4bio</strong></p>
+<p>Direct tweets to <strong><span class="citation">@cjlortie</span> #rstats #rstats4bio</strong></p>
 <p>The first six weeks of the course, i.e. <strong>Module 1</strong>, will cover data science &amp; fundamental exploratory data analysis in R. It is a brief introduction to contemporary open science, best-practice data management, and some fundamental biostatistical working tools. The primary goal is exploration of tools and approaches associated with effective, efficient, reproducible biostatistical analyses. Inspirations include <a href="http://software-carpentry.org">software carpentry</a>, <a href="http://rforcats.net">rforcats</a>, and many, more open, online, free I can direct you to as needed. The <a href="http://biology.gradstudies.yorku.ca/courses/biol-5081/">description</a> provided by the university is a useful starting point in deciding if this offering meets your specific needs.</p>
 <p><br></p>
 <p><strong>Outline</strong><br />
-<a href="https://github.com/cjlortie/rstats4bio/blob/master/BIOL5081-2018.pdf">Course outline pdf</a></p>
+<a href="https://github.com/cjlortie/rstats4bio/blob/master/BIOL5081-2019.pdf">Course outline pdf</a></p>
 <p><a href="https://global.oup.com/academic/product/the-new-statistics-with-r-9780198729068?cc=us&amp;lang=en&amp;">The new statistics for R paperbook</a> available in bookstore and online.</p>
 <p><strong>Schedule for module 1</strong><br />
-Sept 6. Lesson 1.<br />
-Sept 13. Lesson 2.<br />
-Sept 20. Lesson 3.<br />
-Sept 27. Lesson 4 &amp; review due to Dr. Lortie by midnight.<br />
-Oct 4. Lesson 5.<br />
-Oct 18. Test begins in class but is take-home and due Oct 25th by noon.</p>
+Sept 4: Data preparation, data visualization, and t-tests.<br />
+Sept 11: Data workflows and missing data.<br />
+Sept 18: Advanced data visualization to explore statistical patterns including correlation analyses.<br />
+Sept 25: General linear models and generalized linear mixed models.<br />
+Oct 2: Review due at start of class 830am via turnitin; Hackathon to explore GLMs and GLMMs<br />
+Oct 9: Statistical models and prediction in the biosciences practical exercise.</p>
 <p><strong>Learning outcomes</strong><br />
 1. Build a data model for a graduate-level dataset.<br />
 2. Develop a reproducible data and statistical workflow.<br />
@@ -249,9 +351,8 @@ Oct 18. Test begins in class but is take-home and due Oct 25th by noon.</p>
 Review 25%<br />
 Take-home statistical test/report 25%</p>
 <p>Both assignments must be submitted to turnitin.com<br />
-Class ID: 18910126<br />
+Class ID: 21965331<br />
 Key: rstats4bio</p>
-</div>
 
 
 

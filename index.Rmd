@@ -12,25 +12,26 @@ adventure_time
 
 Please tweet all discoveries because we will scrape these data at the end of term for test.
 
-Direct tweets to **@cjlortie#rstats #rstats4bio**
+Direct tweets to **@cjlortie #rstats #rstats4bio**
 
 The first six weeks of the course, i.e. **Module 1**, will cover data science & fundamental exploratory data analysis in R.  It is a brief introduction to contemporary open science, best-practice data management, and some fundamental biostatistical working tools. The primary goal is exploration of tools and approaches associated with effective, efficient, reproducible biostatistical analyses. Inspirations include [software carpentry](http://software-carpentry.org), [rforcats](http://rforcats.net), and many, more open, online, free I can direct you to as needed. The [description](http://biology.gradstudies.yorku.ca/courses/biol-5081/) provided by the university is a useful starting point in deciding if this offering meets your specific needs.
 
 <br>  
 
 **Outline**    
-[Course outline pdf](https://github.com/cjlortie/rstats4bio/blob/master/BIOL5081-2018.pdf)  
+[Course outline pdf](https://github.com/cjlortie/rstats4bio/blob/master/BIOL5081-2019.pdf)  
 
 [The new statistics for R paperbook](https://global.oup.com/academic/product/the-new-statistics-with-r-9780198729068?cc=us&lang=en&) available in bookstore and online.  
 
 
 **Schedule for module 1**  
-Sept 6. Lesson 1.   
-Sept 13. Lesson 2.   
-Sept 20. Lesson 3.  
-Sept 27. Lesson 4 & review due to Dr. Lortie by midnight.    
-Oct 4. Lesson 5.  
-Oct 18. Test begins in class but is take-home and due Oct 25th by noon.  
+Sept 4:   Data preparation, data visualization, and t-tests.  
+Sept 11: Data workflows and missing data.  
+Sept 18: Advanced data visualization to explore statistical patterns including correlation analyses.  
+Sept 25: General linear models and generalized linear mixed models.  
+Oct 2:     Review due at start of class 830am via turnitin; Hackathon to explore GLMs and GLMMs  
+Oct 9:     Statistical models and prediction in the biosciences practical exercise.  
+
 
 **Learning outcomes**  
 1.	Build a data model for a graduate-level dataset.  
@@ -44,7 +45,7 @@ Review 25%
 Take-home statistical test/report 25%  
 
 Both assignments must be submitted to turnitin.com  
-Class ID: 18910126  
+Class ID: 21965331    
 Key: rstats4bio  
 
 
