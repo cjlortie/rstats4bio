@@ -4,8 +4,8 @@ output: html_document
 ---
 <br>
 
-###Biostatistics in R  
-![](./stats.JPG)  
+### Biostatistics in R  
+![](./stats.jpg)  
 <br>
 **rstats4bio**
 adventure_time  
@@ -48,6 +48,9 @@ Both assignments must be submitted to turnitin.com
 Class ID: 21965331    
 Key: rstats4bio  
 
+[RStudio Server](http://rho.sci.yorku.ca:8787)  
+[Five-minute dungeon data](http://bit.ly/5MD_DATA)  
+[Five-minute dungeon data download link](http://bit.ly/5MD_DOWNLOAD)  
 
 
 
