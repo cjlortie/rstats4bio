@@ -50,7 +50,7 @@ Key: rstats4bio
 
 [RStudio Server](http://rho.sci.yorku.ca:8787)  
 [Five-minute dungeon data](http://bit.ly/5MD_DATA)  
-[Five-minute dungeon data download link](http://bit.ly/5MD_DOWNLOAD)  
+
 
 
 
