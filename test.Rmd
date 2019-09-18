@@ -4,7 +4,7 @@ output: html_document
 ---
 <br>
 
-###Competency test  
+### Competency test  
 ![](./test.jpg)  
 
 
@@ -32,13 +32,13 @@ A practical test will begin in class. You can work in class and get whatever adv
 3. How does happiness change over time and if so why?  
 4. BONUS: are the happiest, poorest people also the highest risk to suffer from climate change?  
 
-[Happy Planet Index Data](https://github.com/cjlortie/rstats4bio/blob/master/data/hpi.csv)  
+[Happy Planet Index Data](https://figshare.com/articles/Happy_Planet_Index_Data/9876401)  
 
-[GDP](https://github.com/cjlortie/rstats4bio/blob/master/data/global.GDP.csv)  
+[GDP](https://figshare.com/articles/Global_GDP_data/9876404)  
 
-[Human pop density](https://github.com/cjlortie/rstats4bio/blob/master/data/human.pop.density.csv)  
+[Human pop density](https://figshare.com/articles/Human_population_density_data/9876389)  
 
-[World Climate Risk Index](https://github.com/cjlortie/rstats4bio/blob/master/data/CRI/world_CRI.csv)
+[World Climate Risk Index](https://figshare.com/articles/World_Climate_Risk_Index_Data/9876413)
 
 
 **Marking key**    
