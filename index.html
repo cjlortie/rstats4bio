@@ -7,6 +7,7 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -83,7 +84,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -244,18 +244,6 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
@@ -356,7 +344,8 @@ Class ID: 21965331<br />
 Key: rstats4bio</p>
 <p><a href="http://rho.sci.yorku.ca:8787">RStudio Server</a><br />
 <a href="http://bit.ly/5MD_DATA">Five-minute dungeon data</a><br />
-<a href="https://cjlortie.github.io/Five_Minute_Dungeon/">Five-minute dungeon stats</a></p>
+<a href="https://cjlortie.github.io/Five_Minute_Dungeon/">Five-minute dungeon stats</a><br />
+<a href="https://figshare.com/articles/Five_Minute_Dungeon_Gaming_Groups/9876446">Five-minute dungeon gaming groups data</a></p>
 </div>
 
 
@@ -376,6 +365,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

@@ -51,6 +51,7 @@ Key: rstats4bio
 [RStudio Server](http://rho.sci.yorku.ca:8787)  
 [Five-minute dungeon data](http://bit.ly/5MD_DATA)  
 [Five-minute dungeon stats](https://cjlortie.github.io/Five_Minute_Dungeon/)  
+[Five-minute dungeon gaming groups data](https://figshare.com/articles/Five_Minute_Dungeon_Gaming_Groups/9876446)  
 
 
 
