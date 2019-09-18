@@ -4,7 +4,7 @@ output: html_document
 ---
 <br>
 
-###Practice test/hackathon  
+### Practice test/hackathon  
 ![](./halloween.jpg)  
 
 
@@ -21,7 +21,6 @@ Costumes options.
 Candy provided.  
 Now, we practice from start to finish including submission of the r-script or rmd you write to [turnitin.com](http://turnitin.com)  
 
-Class ID: 18910126 and Key is rstats4bio
 
 A graduate-level dataset.
 Apply your new mathemagical skills from scratch.
@@ -30,7 +29,7 @@ As advanced as you want to be.
 Fundamental principles demonstrated.
 At least two fundamental statistical tests demonstrated.
 
-<b>Practical outcomes to demonstrate </b>
+<b>Practical outcomes to demonstrate </b>  
 Rename some variables.
 Address missing values.
 Generate a simplified table/dataframe. 
@@ -43,11 +42,11 @@ Annotate
 **Challenge**  
 Compare Canada and USA candy sales at Halloween including population density of each country each in year in your analyses.  
 
-[Canadian Candy Data](https://github.com/cjlortie/rstats4bio/blob/master/data/halloween/canada/canadian.candy.sales.csv)  
+[Canadian Candy Data](https://figshare.com/articles/Canadian_Candy_Sales/9876386)  
 
-[USA Halloween spending](https://github.com/cjlortie/rstats4bio/blob/master/data/halloween/usa/usa.halloween.spending.csv)  
+[USA Halloween spending](https://figshare.com/articles/USA_Halloween_spending_data/9876380)  
 
-[World population data](https://github.com/cjlortie/rstats4bio/blob/master/data/halloween/general%20data/human.pop.density.csv)  
+[World population data](https://figshare.com/articles/Human_population_density_data/9876389)    
 
 **Marking key**    
 ```{r, warning=FALSE, message=FALSE, echo=FALSE}

@@ -7,11 +7,12 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title></title>
+<title>lesson5.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -69,9 +70,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -85,7 +84,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -95,6 +93,9 @@ img {
 }
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
 }
 </style>
 
@@ -110,7 +111,6 @@ body {
   padding-top: 50px;
   margin-top: -50px;
 }
-
 .section h2 {
   padding-top: 50px;
   margin-top: -50px;
@@ -130,6 +130,43 @@ body {
 .section h6 {
   padding-top: 50px;
   margin-top: -50px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -151,19 +188,73 @@ $(document).ready(function () {
 });
 </script>
 
-
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -223,10 +314,7 @@ $(document).ready(function () {
 <p><br></p>
 <div id="practice-testhackathon" class="section level3">
 <h3>Practice test/hackathon</h3>
-<div class="figure">
-<img src="halloween.jpg" />
-
-</div>
+<p><img src="halloween.jpg" /></p>
 <p>Here is a webinar I like and also a good book chapter.</p>
 <p><a href="https://www.rstudio.com/resources/webinars/getting-your-data-into-r/">Tutorial on reading data into R</a></p>
 <p><a href="https://bookdown.org/csgillespie/efficientR/data-carpentry.html">Great read on efficient data carpentry</a></p>
@@ -235,14 +323,14 @@ $(document).ready(function () {
 Costumes options.<br />
 Candy provided.<br />
 Now, we practice from start to finish including submission of the r-script or rmd you write to <a href="http://turnitin.com">turnitin.com</a></p>
-<p>Class ID: 18910126 and Key is rstats4bio</p>
 <p>A graduate-level dataset. Apply your new mathemagical skills from scratch. A single three-hour block. As advanced as you want to be. Fundamental principles demonstrated. At least two fundamental statistical tests demonstrated.</p>
-<p><b>Practical outcomes to demonstrate </b> Rename some variables. Address missing values. Generate a simplified table/dataframe. Visualize the data to identify patterns and relationships. Produce a publication quality graphic. Do EDA on data very broadly. Do a single statistical address to capture main effect observed. Annotate</p>
+<p><b>Practical outcomes to demonstrate </b><br />
+Rename some variables. Address missing values. Generate a simplified table/dataframe. Visualize the data to identify patterns and relationships. Produce a publication quality graphic. Do EDA on data very broadly. Do a single statistical address to capture main effect observed. Annotate</p>
 <p><strong>Challenge</strong><br />
 Compare Canada and USA candy sales at Halloween including population density of each country each in year in your analyses.</p>
-<p><a href="https://github.com/cjlortie/rstats4bio/blob/master/data/halloween/canada/canadian.candy.sales.csv">Canadian Candy Data</a></p>
-<p><a href="https://github.com/cjlortie/rstats4bio/blob/master/data/halloween/usa/usa.halloween.spending.csv">USA Halloween spending</a></p>
-<p><a href="https://github.com/cjlortie/rstats4bio/blob/master/data/halloween/general%20data/human.pop.density.csv">World population data</a></p>
+<p><a href="https://figshare.com/articles/Canadian_Candy_Sales/9876386">Canadian Candy Data</a></p>
+<p><a href="https://figshare.com/articles/USA_Halloween_spending_data/9876380">USA Halloween spending</a></p>
+<p><a href="https://figshare.com/articles/Human_population_density_data/9876389">World population data</a></p>
 <p><strong>Marking key</strong></p>
 <table>
 <thead>
@@ -311,6 +399,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
